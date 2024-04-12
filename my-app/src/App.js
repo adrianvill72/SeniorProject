@@ -1,12 +1,12 @@
 import React from 'react';
-import EventPage from './components/Homepage/EventPage';
-
-function App() {
-  return (
-    <div className="App">
-      <EventPage />
-    </div>
-  );
-}
+import Signup from "./signup"
+import {Outlet} from "react-router-dom";
+const App = () => {
+    return (
+        <div className="App">
+          <Outlet/>
+        </div>
+    );
+};
 
 export default App;
