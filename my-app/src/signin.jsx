@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import auth  from './firebase';
+import {auth}  from './firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -17,8 +17,8 @@ const Signin = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log(userCredential);
             const user = userCredential.user;
-            localStorage.setItem('token', user.accessToken);
-            localStorage.setItem('user', JSON.stringify(user));
+            sessionStorage.setItem('token', user.accessToken);
+            sessionStorage.setItem('user', JSON.stringify(user));
             navigate("/");
         } catch (error) {
             console.error(error);

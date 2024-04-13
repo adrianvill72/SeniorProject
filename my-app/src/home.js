@@ -1,16 +1,15 @@
-import React from 'react';
 import {signOut} from "firebase/auth"
 import {Link, useNavigate} from "react-router-dom";
-import EventPage from './components/homepage/EventPage';
+import EventPage from './components/Homepage/EventPage';
+import NavBar from "./components/Homepage/NavBar";
+import {useAuth}  from './firebase';
+import {userNavBar,guestNavBar} from "./components/Homepage/NavBar";
 
 const Home = () => {
-    const navigate=useNavigate()
     return (
         <div>
-            HOME welcome!
-            <p>Need to Login? <Link to="/signin">Login</Link></p>
-            <p>Need to Signup? <Link to="/signup">Create Account</Link></p>
-             <EventPage />
+            <NavBar/>
+             <EventPage/>
         </div>
     );
 };

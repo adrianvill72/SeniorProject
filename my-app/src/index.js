@@ -9,14 +9,17 @@ import Signin from "./signin"
 import Protected from "./Protected";
 import Home from "./home";
 
+
 const router= createBrowserRouter(
     createRoutesFromElements(
-        <Route path={"/"} element={<App />}>
+
+            <Route path={"/"} element={<App />}>
             <Route path="signup" element={<Signup/>}/>]
             <Route path="signin" element={<Signin/>}/>
             <Route path="/" element={<Protected/>}/>
             <Route path="/" index element={<Home/>}/>
-        </Route>
+            </Route>
+
     )
 )
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import auth from './firebase';
+import {auth, db} from './firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -9,20 +9,35 @@ function Signup(){
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-
+    const [role, setRole] = useState({
+        host: false,
+        businessOwner: false
+    });
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setMessage('');
+
+        if (!role) {
+            setError('Please select a role.');
+            return; // Prevent submission if no role is selected
+        }
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(userCredential);
+            console.log("User Created: ", userCredential);
             const user = userCredential.user;
-            localStorage.setItem('token', user.accessToken);
-            localStorage.setItem('user', JSON.stringify(user));
-            navigate("/signin");
+            sessionStorage.setItem('token', user.accessToken);
+            sessionStorage.setItem('user', JSON.stringify(user));
+            // await setDoc(doc(db, "users", user.uid), {
+            //     email: user.email,
+            //     role: role
+            // });
+            navigate("/");
         } catch (error) {
-            console.error(error);
+            console.error("Signup Error: ",error);
             setError(error.message); // Error message from Firebase or another error source
             setMessage('');
         }
@@ -63,16 +78,18 @@ function Signup(){
                                     </span>
                                     </div>
                                 </div>
-                                <div className="mb-3 input-group-lg">
-                                    <input className="form-control" type="password" placeholder="Confirm password"/>
-                                </div>
                                 <div className="mb-3 text-start">
-                                    <input type="checkbox" className="form-check-input" id="keepsingnedCheck"/>
-                                    <label className="form-check-label" htmlFor="keepsingnedCheck">Keep me signed
-                                        in</label>
+                                    <input type="radio" className="form-check-input" name="role" value="businessOwner" id="keepsingnedCheck" onChange={() => setRole('host')}/>
+                                    <label className="form-check-label" htmlFor="keepsingnedCheck">I am an Event Host</label>
+
+                                    <input type="radio" className="form-check-input" value="businessOwner" name="role" id="keepsingnedCheck " onChange={() => setRole('businessOwner')}
+                                    />
+                                    <label className="form-check-label" htmlFor="keepsingnedCheck"> I own a small business</label>
+
                                 </div>
                                 <div className="d-grid">
-                                    <button type="submit" className="signup-button btn btn-lg btn-primary">Sign me up</button>
+                                    <button type="submit" className="signup-button btn btn-lg btn-primary">Sign me up
+                                    </button>
                                 </div>
                             </form>
                         </div>
