@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {auth, db} from './firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 function Signup(){
 
@@ -35,6 +36,16 @@ function Signup(){
             //     email: user.email,
             //     role: role
             // });
+            try {
+                await setDoc(doc(db, "Users", user.uid), {
+                    email: user.email, // Store user email
+                    lastLogin: new Date(user.metadata.lastSignInTime), // Store last login time
+                }, {merge: true}); // This will update the data if the document already exists
+                 }catch(error){
+                console.error(error);
+                setError(error.message);
+                navigate("/error-page")
+            }
             navigate("/");
         } catch (error) {
             console.error("Signup Error: ",error);
@@ -80,11 +91,11 @@ function Signup(){
                                 </div>
                                 <div className="mb-3 text-start">
                                     <input type="radio" className="form-check-input" name="role" value="businessOwner" id="keepsingnedCheck" onChange={() => setRole('host')}/>
-                                    <label className="form-check-label" htmlFor="keepsingnedCheck">I am an Event Host</label>
+                                    <label className="form-check-label" htmlFor="keepsingnedCheck">Host</label>
 
                                     <input type="radio" className="form-check-input" value="businessOwner" name="role" id="keepsingnedCheck " onChange={() => setRole('businessOwner')}
                                     />
-                                    <label className="form-check-label" htmlFor="keepsingnedCheck"> I own a small business</label>
+                                    <label className="form-check-label" htmlFor="keepsingnedCheck"> Vendor</label>
 
                                 </div>
                                 <div className="d-grid">
