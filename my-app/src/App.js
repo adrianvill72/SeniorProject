@@ -1,11 +1,10 @@
 import React from 'react';
-
-import EventBody from './components/Details/EventBody';
+import EventPage from './components/Homepage/EventPage';
 
 function App() {
   return (
     <div className="App">
-      <EventBody />
+      <EventPage />
     </div>
   );
 }

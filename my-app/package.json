@@ -9,6 +9,7 @@
     "bootstrap": "^5.3.3",
     "choices.js": "^10.2.0",
     "dropzone": "^6.0.0-beta.2",
+    "firebase": "^10.11.0",
     "flatpickr": "^4.6.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
