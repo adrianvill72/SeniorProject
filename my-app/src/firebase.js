@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {getFirestore} from 'firebase/firestore';
+import { getDatabase } from "firebase/database";
+import { ref, get, child} from "firebase/database";
 
 
 const firebaseConfig = {
@@ -20,32 +21,46 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db =getFirestore(app)
-export const AuthContext = createContext();
-
+export const db =getDatabase(app)
 export const AuthProvider = ({ children }) => {
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            setUser(user);
+        const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+            if (authUser) {
+                // Fetch additional user data from Firebase
+                const userProfileRef = ref(db, 'users/' + authUser.uid);
+                const snapshot = await get(userProfileRef);
+                if (snapshot.exists()) {
+                    const userDetails = snapshot.val();
+                    setUser({
+                        ...authUser,
+                        ...userDetails // Merge auth user object with database user details
+                    });
+                    console.log("Snapshot: ", snapshot.val())
+                } else {
+                    setUser(authUser); // No additional details found, use default auth user
+                }
+            } else {
+                setUser(null);
+            }
             setLoading(false);
         });
 
-        // Clean up the subscription on unmount
         return () => unsubscribe();
     }, []);
 
     if (loading) {
+
         return <div>Loading...</div>; // Or whatever loading state you want to show
     }
-
     return (
         <AuthContext.Provider value={{ user }}>
             {children}
         </AuthContext.Provider>
     );
+
 };
 export const SignOutUser=async ()=>{
     try {
@@ -55,6 +70,7 @@ export const SignOutUser=async ()=>{
         console.error("Error: ", e);
     }
 }
+export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 
