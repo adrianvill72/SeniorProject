@@ -37,7 +37,7 @@ const EventDetails = ({ event }) =>{
       <div className="col-sm-6 col-xl-4">
           <div className="card h-100">
             <div className="position-relative">
-              <img className="img-fluid rounded-top" src={event.image} alt="" />
+              <img className="imgfluid rounded-top" src={event.image} alt="" />
               <div className="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
                 Online
               </div>

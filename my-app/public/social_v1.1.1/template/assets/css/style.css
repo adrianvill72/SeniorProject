@@ -710,6 +710,11 @@ progress {
   max-width: 100%;
   height: auto;
 }
+.imgfluid {
+  width: 400px;   /* Set a fixed width, adjust as necessary */
+  height: 250px;  /* Set a fixed height, adjust as necessary */
+  object-fit: cover; /* Ensures the image covers the area, cropping if needed */
+}
 
 .img-thumbnail {
   padding: 0.25rem;

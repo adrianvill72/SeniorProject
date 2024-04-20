@@ -710,7 +710,11 @@ progress {
   max-width: 100%;
   height: auto;
 }
-
+.imgfluid {
+  width: 80px;   /* Set a fixed width, adjust as necessary */
+  height: 60px;  /* Set a fixed height, adjust as necessary */
+  object-fit: cover;
+}
 .img-thumbnail {
   padding: 0.25rem;
   background-color: var(--bs-body-bg);

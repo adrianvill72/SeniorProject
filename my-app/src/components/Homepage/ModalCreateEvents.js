@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getDatabase, set,ref, push} from "firebase/database";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL  } from "firebase/storage";
-
+import { getAuth } from 'firebase/auth';
 
 function ModalCreateEvents() {
 
@@ -37,12 +37,14 @@ function ModalCreateEvents() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
+    const auth = getAuth();
+    const user = auth.currentUser;
     const db = getDatabase();
     const eventsRef = ref(db, 'events');
     const newEventRef = push(eventsRef);
 
     try {
-      await set(newEventRef, {...eventData});
+      await set(newEventRef, {...eventData,creator: user.uid });
       alert("Event successfully created!"); // Show success message
       // Close modal here if needed or redirect
       // Assuming modalInstance is the Bootstrap modal instance
