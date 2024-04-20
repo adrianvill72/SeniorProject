@@ -26,12 +26,7 @@ function EventCard() {
                 <ModalCreateEvents />
             </div>
             <div className="card-body">
-                <div className="row g-4">
-                    <div className="col-sm-6 col-xl-4">
-                        {/* Event items go here */}
-                        <EventDetails />
-                    </div>
-                </div>
+                <EventDetails />
             </div>
         </div>
     );

@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getDatabase, ref, set, push} from "firebase/database";
+import { getDatabase, set,ref, push} from "firebase/database";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL  } from "firebase/storage";
+
 
 function ModalCreateEvents() {
+
   const [eventData, setEventData] = useState({
     title: '',
     description: '',
@@ -12,10 +15,25 @@ function ModalCreateEvents() {
     guestEmail: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s'
   });
-
   const handleChange = (e) => {
     const {name, value} = e.target;
     setEventData(prev => ({...prev, [name]: value}));
+  };
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      console.log("No file selected.");
+      return;
+    }
+    const storage = getStorage();
+    const storageReference = storageRef(storage, `events/${file.name}`);
+    try {
+      const snapshot = await uploadBytes(storageReference, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setEventData(prev => ({...prev, image: downloadURL}));
+    } catch (error) {
+      console.error("Error uploading image: ", error);
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -31,6 +49,7 @@ function ModalCreateEvents() {
     } catch (error) {
       console.error("Failed to create new event: ", error);
     }
+
   };
   return (
       <div className="modal fade" id="modalCreateEvents" tabIndex="-1" aria-labelledby="modalLabelCreateEvents"
@@ -79,8 +98,8 @@ function ModalCreateEvents() {
                          value={eventData.guestEmail} onChange={handleChange}/>
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Upload attachment</label>
-                  <input type="file" className="form-control" name="attachments"/>
+                  <label  className="form-label">Upload attachment</label>
+                  <input onChange={handleImageChange} type="file" className="form-control" name="attachments"/>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>

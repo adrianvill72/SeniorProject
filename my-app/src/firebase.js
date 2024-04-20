@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { ref, get, child} from "firebase/database";
-
+import { ref, get} from "firebase/database";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB407uFF7J_X9Z9RAcqA6jaa57ohtwvpjA",
@@ -13,7 +13,7 @@ const firebaseConfig = {
     messagingSenderId: "411479983979",
     appId: "1:411479983979:web:4178573bdee782f1dfae2e",
     measurementId: "G-9T85KMS39F",
-    databaseURL: "https://loma-5a9be-default-rtdb.firebaseio.com/"
+    databaseURL: "https://loma-5a9be-default-rtdb.firebaseio.com/",
 };
 
 
