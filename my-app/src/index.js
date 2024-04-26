@@ -10,6 +10,8 @@ import Protected from "./Protected";
 import Home from "./home";
 import HostEvent from "./components/Profiles/Host/hostp";
 import HostApp from "./components/Profiles/Host/hosta";
+import VendorEvent from "./components/Profiles/Vendor/vendore";
+import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
 
 
 
@@ -23,6 +25,8 @@ const router= createBrowserRouter(
             <Route path="/" index element={<Home/>}/>
             <Route path="/profile" element={<HostEvent/>}/>
             <Route path="/applications" element={<HostApp/>}/>
+            <Route path="/vendor-events" element={<VendorEvent/>}/>
+            <Route path='/vendor-products' element={<VendorProductsPage/>}/>
 
             </Route>
 
