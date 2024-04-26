@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         return <div>Loading...</div>; // Or whatever loading state you want to show
     }
     return (
-        <AuthContext.Provider value={{ user }}>
+        <AuthContext.Provider value={{ user,setUser  }}>
             {children}
         </AuthContext.Provider>
     );

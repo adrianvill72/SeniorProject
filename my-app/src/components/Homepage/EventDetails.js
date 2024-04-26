@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from "firebase/database";
 import { Link } from 'react-router-dom';
 import {getAuth} from "firebase/auth";
+import {useAuth} from "../../firebase";
 const EventsList = () => {
   const [events, setEvents] = useState([]);
-
+  const user = useAuth();
+  console.log(user)
   useEffect(() => {
     const db = getDatabase();
     const eventsRef = ref(db, 'events');
@@ -18,6 +20,7 @@ const EventsList = () => {
           id: key,
           ...data[key]
         }));
+        loadedEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
         setEvents(loadedEvents);
       }
     });
