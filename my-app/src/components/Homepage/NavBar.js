@@ -34,6 +34,7 @@ const UserNavBar = () => {
     const userToken = sessionStorage.getItem('token');
     console.log("User Token: ",userToken)
     const {user} = useAuth();
+    const profileLink = user.isHost ? "/Host_profile" : "/Temp";
     return (
         <nav className="navbar navbar-expand-lg">
             <div className="container">
@@ -101,7 +102,7 @@ const UserNavBar = () => {
                                         <p className="small m-0">{user.isHost ? "Host" : "Vendor"}</p>
                                     </div>
                                 </div>
-                                <Link to="/Temp" className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center">
+                                <Link to={profileLink} className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center">
                                     View profile
                                 </Link>
                             </li>

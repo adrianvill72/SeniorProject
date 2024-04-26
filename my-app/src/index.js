@@ -21,11 +21,10 @@ const router= createBrowserRouter(
             <Route path="signin" element={<Signin/>}/>
             <Route path="/" element={<Protected/>}/>
             <Route path="/" index element={<Home/>}/>
-            <Route path="/profile" element={<HostEvent/>}/>
+            <Route path="/Host_profile" element={<HostEvent/>}/>
             <Route path="/applications" element={<HostApp/>}/>
             <Route path="Temp" element={<Temp/>} />
             <Route path="/Event" element={<EventBody/>} />
-
             </Route>
 
     )

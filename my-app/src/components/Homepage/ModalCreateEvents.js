@@ -2,8 +2,16 @@ import React, {useState} from 'react';
 import { getDatabase, set,ref, push} from "firebase/database";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL  } from "firebase/storage";
 import { getAuth } from 'firebase/auth';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function ModalCreateEvents() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const db = getDatabase();
+  const eventsRef = ref(db, 'events');
+  const newEventRef = push(eventsRef);
+
   const [eventData, setEventData] = useState({
     title: '',
     description: '',
@@ -11,17 +19,23 @@ function ModalCreateEvents() {
     time: '',
     duration: '',
     location: '',
-    guestEmail: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s',
-    participants: []  // Added to track participating vendors/stores
+    participants: ['']  // Added to track participating vendors/stores
   });
-  const [vendors, setVendors] = useState([]);  // Assuming you have a way to fetch these
+  const [vendors, setVendors] = useState([]);
 
   const handleChange = (e) => {
     const {name, value} = e.target;
+
     setEventData(prev => ({...prev, [name]: value}));
   };
-
+  const dateChange = date => {
+    const formattedDate = date.toISOString().split('T')[0];
+    setEventData(prevState => ({
+      ...prevState,
+      date: formattedDate
+    }));
+  };
   const handleVendorSelection = (e) => {
     const selectedId = e.target.value;
     const isSelected = eventData.participants.includes(selectedId);
@@ -50,12 +64,6 @@ function ModalCreateEvents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const db = getDatabase();
-    const eventsRef = ref(db, 'events');
-    const newEventRef = push(eventsRef);
-
     try {
       await set(newEventRef, {...eventData, creator: user.uid });
       alert("Event successfully created!");
@@ -87,12 +95,16 @@ function ModalCreateEvents() {
                 </div>
                 <div className="col-sm-4">
                   <label className="form-label">Date</label>
-                  <input type="text" className="form-control" placeholder="Select date" name="date"
-                         value={eventData.date} onChange={handleChange}/>
+                  <ReactDatePicker
+                      selected={eventData.date}
+                      onChange={dateChange}
+                      dateFormat="yyyy-MM-dd"
+                      className="form-control"
+                  />
                 </div>
                 <div className="col-sm-4">
                   <label className="form-label">Time</label>
-                  <input type="text" className="form-control" placeholder="Select time" name="time"
+                  <input type="time" className="form-control" name="time"
                          value={eventData.time} onChange={handleChange}/>
                 </div>
                 <div className="col-sm-4">

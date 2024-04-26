@@ -26,7 +26,7 @@ const EventsList = () => {
 
   return (
       <div className="row g-4">
-        {events.map(event => (
+        {events.map((event) => (
             <EventDetails key={event.id} event={event}/>
         ))}
       </div>
@@ -58,12 +58,15 @@ const EventDetails = ({ event }) =>{
               <p className="mb-0 small"><i className="bi bi-calendar-check pe-1"></i> {event.date}</p>
               <p className="small"><i className="bi bi-geo-alt pe-1"></i> {event.location}</p>
               <div className="d-flex mt-3 justify-content-between">
-                <div className="w-100">
-                  <input type="checkbox" className="btn-check d-block" id="Interested1" />
-                  <label className="btn btn-sm btn-outline-success d-block" htmlFor="Interested1"><i className="bi bi-thumbs-up"></i> Interested</label>
+                <div className="w-100" key={event.id}>
+                  <input type="checkbox" className="btn-check d-block" id={`Interested${event.id}`}/>
+                  <label className="btn btn-sm btn-outline-success d-block" htmlFor={`Interested${event.id}`}>
+                    <i className="bi bi-thumbs-up"></i> Interested
+                  </label>
                 </div>
                 <div className="dropdown ms-3">
-                  <button className="btn btn-sm btn-primary-soft" id="eventActionShare" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button className="btn btn-sm btn-primary-soft" id="eventActionShare" data-bs-toggle="dropdown"
+                          aria-expanded="false">
                     <i className="bi bi-share-fill"></i>
                   </button>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="eventActionShare">

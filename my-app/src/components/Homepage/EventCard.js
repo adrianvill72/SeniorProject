@@ -1,5 +1,5 @@
 import React from 'react';
-import EventDetails from './EventDetails';
+import EventsList from './EventDetails';
 import ModalCreateEvents from './ModalCreateEvents';
 import {useAuth}  from '../../firebase';
 const EventCreationButton = () => {
@@ -25,7 +25,7 @@ function EventCard() {
                 <ModalCreateEvents />
             </div>
             <div className="card-body">
-                <EventDetails />
+                <EventsList />
             </div>
         </div>
     );
