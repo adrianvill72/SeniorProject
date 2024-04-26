@@ -73,30 +73,10 @@ const UserNavBar = () => {
                             <a className="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">Account </a>
                             <ul className="dropdown-menu" aria-labelledby="postMenu">
-                                <li><a className="dropdown-item" href="create-page.html">Create a page</a></li>
-                                <li><a className="dropdown-item" href="settings.html">Settings</a></li>
-                                <li><a className="dropdown-item" href="notifications.html">Notifications</a></li>
-                                <li><a className="dropdown-item" href="help.html">Help center</a></li>
-                                <li><a className="dropdown-item" href="help-details.html">Help details</a></li>
-                                <li className="dropdown-submenu dropstart">
-                                    <a className="dropdown-item dropdown-toggle" href="#">Authentication</a>
-                                    <ul className="dropdown-menu dropdown-menu-end" data-bs-popper="none">
-                                        <li><a className="dropdown-item" href="sign-in.html">Sign in</a></li>
-                                        <li><a className="dropdown-item" href="sign-up.html">Sing up</a></li>
-                                        <li><a className="dropdown-item" href="forgot-password.html">Forgot password</a>
-                                        </li>
-                                        <li className="dropdown-divider"></li>
-                                        <li><a className="dropdown-item" href="sign-in-advance.html">Sign in advance</a>
-                                        </li>
-                                        <li><a className="dropdown-item" href="sign-up-advance.html">Sing up advance</a>
-                                        </li>
-                                        <li><a className="dropdown-item" href="forgot-password-advance.html">Forgot password
-                                            advance</a></li>
-                                    </ul>
-                                </li>
-                                <li><a className="dropdown-item" href="error-404.html">Error 404</a></li>
-                                <li><a className="dropdown-item" href="offline.html">Offline</a></li>
-                                <li><a className="dropdown-item" href="privacy-and-terms.html">Privacy & terms</a></li>
+                                {user.isVendor && (
+                                    <li><Link className="dropdown-item" to="/Temp">Create Store</Link></li>
+                                )}
+                                <li><a className="dropdown-item" href="/settings">Settings</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -121,8 +101,9 @@ const UserNavBar = () => {
                                         <p className="small m-0">{user.isHost ? "Host" : "Vendor"}</p>
                                     </div>
                                 </div>
-                                <a className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center"
-                                   href="my-profile.html">View profile</a>
+                                <Link to="/Temp" className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center">
+                                    View profile
+                                </Link>
                             </li>
                             <li><a className="dropdown-item" href="settings.html"><i className="bi bi-gear fa-fw me-2"></i>Settings
                                 & Privacy</a></li>

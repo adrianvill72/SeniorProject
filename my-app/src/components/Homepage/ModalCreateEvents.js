@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import { getDatabase, set,ref, push} from "firebase/database";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL  } from "firebase/storage";
 import { getAuth } from 'firebase/auth';
 
 function ModalCreateEvents() {
-
   const [eventData, setEventData] = useState({
     title: '',
     description: '',
@@ -13,12 +12,25 @@ function ModalCreateEvents() {
     duration: '',
     location: '',
     guestEmail: '',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s',
+    participants: []  // Added to track participating vendors/stores
   });
+  const [vendors, setVendors] = useState([]);  // Assuming you have a way to fetch these
+
   const handleChange = (e) => {
     const {name, value} = e.target;
     setEventData(prev => ({...prev, [name]: value}));
   };
+
+  const handleVendorSelection = (e) => {
+    const selectedId = e.target.value;
+    const isSelected = eventData.participants.includes(selectedId);
+    setEventData(prev => ({
+      ...prev,
+      participants: isSelected ? prev.participants.filter(id => id !== selectedId) : [...prev.participants, selectedId]
+    }));
+  };
+
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -35,8 +47,9 @@ function ModalCreateEvents() {
       console.error("Error uploading image: ", error);
     }
   };
+
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     const auth = getAuth();
     const user = auth.currentUser;
     const db = getDatabase();
@@ -44,15 +57,13 @@ function ModalCreateEvents() {
     const newEventRef = push(eventsRef);
 
     try {
-      await set(newEventRef, {...eventData,creator: user.uid });
-      alert("Event successfully created!"); // Show success message
-      // Close modal here if needed or redirect
-      // Assuming modalInstance is the Bootstrap modal instance
+      await set(newEventRef, {...eventData, creator: user.uid });
+      alert("Event successfully created!");
     } catch (error) {
       console.error("Failed to create new event: ", error);
     }
-
   };
+
   return (
       <div className="modal fade" id="modalCreateEvents" tabIndex="-1" aria-labelledby="modalLabelCreateEvents"
            aria-hidden="true">
@@ -95,12 +106,17 @@ function ModalCreateEvents() {
                          value={eventData.location} onChange={handleChange}/>
                 </div>
                 <div className="col-12">
-                  <label className="form-label">Add guests</label>
-                  <input type="email" className="form-control" placeholder="Guest email" name="guestEmail"
-                         value={eventData.guestEmail} onChange={handleChange}/>
+                  <label className="form-label">Participating Vendors</label>
+                  <select multiple className="form-control" onChange={handleVendorSelection}>
+                    {vendors.map(vendor => (
+                        <option key={vendor.id} value={vendor.id}>
+                          {vendor.name}
+                        </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="mb-3">
-                  <label  className="form-label">Upload attachment</label>
+                  <label className="form-label">Upload attachment</label>
                   <input onChange={handleImageChange} type="file" className="form-control" name="attachments"/>
                 </div>
                 <div className="modal-footer">

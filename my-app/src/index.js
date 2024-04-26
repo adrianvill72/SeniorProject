@@ -10,8 +10,8 @@ import Protected from "./Protected";
 import Home from "./home";
 import HostEvent from "./components/Profiles/Host/hostp";
 import HostApp from "./components/Profiles/Host/hosta";
-
-
+import Temp from "./components/OtherPages/Temp";
+import EventBody from "./components/Details/EventBody";
 
 const router= createBrowserRouter(
     createRoutesFromElements(
@@ -23,6 +23,8 @@ const router= createBrowserRouter(
             <Route path="/" index element={<Home/>}/>
             <Route path="/profile" element={<HostEvent/>}/>
             <Route path="/applications" element={<HostApp/>}/>
+            <Route path="Temp" element={<Temp/>} />
+            <Route path="/Event" element={<EventBody/>} />
 
             </Route>
 

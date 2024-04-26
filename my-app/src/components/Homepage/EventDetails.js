@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from "firebase/database";
-
+import { Link } from 'react-router-dom';
+import {getAuth} from "firebase/auth";
 const EventsList = () => {
   const [events, setEvents] = useState([]);
 
@@ -33,18 +34,27 @@ const EventsList = () => {
 };
 
 const EventDetails = ({ event }) =>{
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const navigateToEditPage = (eventId) => {
+    console.log(eventId);
+  }
   return (
       <div className="col-sm-6 col-xl-4">
           <div className="card h-100">
             <div className="position-relative">
               <img className="imgfluid rounded-top" src={event.image} alt="" />
-              <div className="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
-                Online
-              </div>
+              {user && user.uid === event.creator && (
+                  <div className="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
+                    <button onClick={() => navigateToEditPage(event.id)}>Edit</button>
+                  </div>
+              )}
             </div>
             <div className="card-body position-relative pt-0">
               <button className="btn btn-xs btn-primary mt-n3" onClick={() => { window.location.href = 'event-details-2.html'; }}>Local Market</button>
-              <h6 className="mt-3"><a href="event-details-2.html">{event.title}</a></h6>
+              <h6 className="mt-3">
+                <Link to="/Event">{event.title}</Link>
+              </h6>
               <p className="mb-0 small"><i className="bi bi-calendar-check pe-1"></i> {event.date}</p>
               <p className="small"><i className="bi bi-geo-alt pe-1"></i> {event.location}</p>
               <div className="d-flex mt-3 justify-content-between">

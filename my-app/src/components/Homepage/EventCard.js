@@ -21,7 +21,6 @@ function EventCard() {
             <div
                 className="card-header d-sm-flex align-items-center text-center justify-content-sm-between border-0 pb-0">
                 <h2 className="h4 card-title">Discover Events</h2>
-                {/* button modal*/}
                 <EventCreationButton />
                 <ModalCreateEvents />
             </div>

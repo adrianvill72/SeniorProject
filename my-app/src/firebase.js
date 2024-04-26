@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
-import { getDatabase } from "firebase/database";
+import { getDatabase, onValue} from "firebase/database";
 import { ref, get} from "firebase/database";
 import { getStorage } from "firebase/storage";
 
@@ -31,17 +31,20 @@ export const AuthProvider = ({ children }) => {
             if (authUser) {
                 // Fetch additional user data from Firebase
                 const userProfileRef = ref(db, 'users/' + authUser.uid);
-                const snapshot = await get(userProfileRef);
-                if (snapshot.exists()) {
-                    const userDetails = snapshot.val();
-                    setUser({
-                        ...authUser,
-                        ...userDetails // Merge auth user object with database user details
-                    });
-                    console.log("Snapshot: ", snapshot.val())
-                } else {
-                    setUser(authUser); // No additional details found, use default auth user
-                }
+                onValue(userProfileRef, (snapshot) => {
+                    if (auth.currentUser) { // Check if user is still authenticated
+                        if (snapshot.exists()) {
+                            const userDetails = snapshot.val();
+                            setUser({
+                                ...authUser,
+                                ...userDetails // Merge auth user object with database user details
+                            });
+                            console.log("Snapshot: ", snapshot.val())
+                        } else {
+                            setUser(authUser); // No additional details found, use default auth user
+                        }
+                    }
+                });
             } else {
                 setUser(null);
             }

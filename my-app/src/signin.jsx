@@ -1,31 +1,46 @@
 import React, { useState } from 'react'
 import {auth}  from './firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {sendPasswordResetEmail, signInWithEmailAndPassword, setPersistence, inMemoryPersistence, browserLocalPersistence,browserSessionPersistence   } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
+import {getAuth} from "firebase/auth";
 
 const Signin = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(''); // State to store error message
-
+    const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
         try {
+            await setPersistence(auth, persistenceType);
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log(userCredential);
             const user = userCredential.user;
-            sessionStorage.setItem('token', user.accessToken);
-            sessionStorage.setItem('user', JSON.stringify(user));
+            if (rememberMe) {
+                localStorage.setItem('user', JSON.stringify(user));
+            } else {
+                sessionStorage.setItem('user', JSON.stringify(user));
+            }
             navigate("/");
         } catch (error) {
             console.error(error);
             setError(error.message);
         }
     }
-
+    const handleResetPassword = async () => {
+        const auth = getAuth();
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert('Password reset email sent! Check your inbox.');
+            })
+            .catch((error) => {
+                setError(error.message);
+            });
+    };
     return (
         <div>
             <div className="container">
@@ -60,10 +75,17 @@ const Signin = () => {
                                 </div>
                                 <div className="mb-3 d-sm-flex justify-content-between">
                                     <div>
-                                        <input type="checkbox" className="form-check-input" id="rememberCheck"/>
+                                        <input type="checkbox"
+                                               className="form-check-input"
+                                               id="rememberCheck"
+                                               checked={rememberMe}
+                                               onChange={() => setRememberMe(!rememberMe)}
+                                        />
                                         <label className="form-check-label" htmlFor="rememberCheck">Remember me?</label>
                                     </div>
-                                    <Link to="/forgot-password">Forgot password?</Link>
+                                    <Link to="#" onClick={handleResetPassword} className="text-small">
+                                        Forgot password?
+                                    </Link>
                                 </div>
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-lg btn-primary">Login</button>
