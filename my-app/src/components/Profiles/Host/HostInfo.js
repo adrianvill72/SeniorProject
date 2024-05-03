@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {getDatabase,  update ,ref} from "firebase/database";
+import {Link} from "react-router-dom";
 const HostInfo = () => {
     const [editMode, setEditMode] = useState(false);
     const { user } = useAuth();
@@ -57,16 +58,33 @@ const HostInfo = () => {
                         <button className="btn btn-danger-soft me-2" type="button" onClick={handleEditClick}>
                             <i className="bi bi-pencil-fill pe-1"></i> Edit profile
                         </button>
+
                     </div>
+
+                </div>
+                <div className="card-footer mt-3 pt-2 pb-0">
+                    <ul className="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/Host_profile">
+                                Events
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/applications">
+                                Applications <span
+                                className="badge bg-success bg-opacity-10 text-success small"> 1</span>
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     );
 };
 
-const EditProfilePage = ({ onCancel }) => {
+const EditProfilePage = ({onCancel}) => {
     const db = getDatabase();
-    const { user, setUser } = useAuth();
+    const {user, setUser} = useAuth();
     const [name, setName] = useState(user?.name || '');
     const [email, setEmail] = useState(user?.email || '');
     const [aboutMe, setAboutMe] = useState(user?.aboutMe || '');
@@ -80,7 +98,7 @@ const EditProfilePage = ({ onCancel }) => {
     }, [user]);
 
     const handleSave = async () => {
-        const updatedUserData = { name, email, aboutMe, profileImage };
+        const updatedUserData = {name, email, aboutMe, profileImage};
 
         // Reference to the Realtime Database path for the user
         const userRef = ref(db, 'users/' + user.uid);
@@ -127,23 +145,28 @@ const EditProfilePage = ({ onCancel }) => {
                 }}>
                     <div className="form-group">
                         <label htmlFor="profileImage">Profile Image</label>
-                        <input type="file" className="form-control" onChange={handleImageChange} />
-                        <div style={{ margin: '10px 0' }}>
-                            <img src={profileImage} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+                        <input type="file" className="form-control" onChange={handleImageChange}/>
+                        <div style={{margin: '10px 0'}}>
+                            <img src={profileImage} alt="Profile"
+                                 style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
                         </div>
                     </div>
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
-                        <input type="text" className="form-control" id="name" value={name} onChange={e => setName(e.target.value)} />
+                        <input type="text" className="form-control" id="name" value={name}
+                               onChange={e => setName(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" className="form-control" id="email" value={email} onChange={e => setEmail(e.target.value)} />
+                        <input type="email" className="form-control" id="email" value={email}
+                               onChange={e => setEmail(e.target.value)}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="aboutMe">About Me</label>
-                        <textarea className="form-control" id="aboutMe" rows="3" value={aboutMe} onChange={e => setAboutMe(e.target.value)} />
+                        <textarea className="form-control" id="aboutMe" rows="3" value={aboutMe}
+                                  onChange={e => setAboutMe(e.target.value)}/>
                     </div>
+
                     <button type="submit" className="btn btn-primary">Save Changes</button>
                 </form>
             </div>

@@ -3,6 +3,7 @@ import MyEvents from './myevents';
 import HostInfo from './HostInfo';
 import {useAuth} from "../../../firebase";
 import NavBar from "../../Homepage/NavBar";
+import {Link} from "react-router-dom";
 const HostEvent = () => {
     const user=useAuth();
 
@@ -12,8 +13,8 @@ const HostEvent = () => {
                 <div className="row g-4">
                     <div className="col-lg-8 vstack gap-4">
                         <NavBar/>
-                        <HostInfo />
-                        <MyEvents />
+                        <HostInfo/>
+                        <MyEvents/>
                     </div>
                 </div>
             </div>

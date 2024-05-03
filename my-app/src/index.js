@@ -15,6 +15,7 @@ import EventBody from "./components/Details/EventBody";
 import VendorEvent from "./components/Profiles/Vendor/vendore";
 import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
 import EditEvent from "./components/Homepage/EditEvent";
+import MyEvents from "./components/Profiles/Host/myevents";
 const router= createBrowserRouter(
     createRoutesFromElements(
 
@@ -30,6 +31,7 @@ const router= createBrowserRouter(
             <Route path='/vendor-products' element={<VendorProductsPage/>}/>
             <Route path="/events/:eventId" element={<EventBody />} />
             <Route path="/events/edit/:eventId" element={<EditEvent />} />
+
             </Route>
 
     )
