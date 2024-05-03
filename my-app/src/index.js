@@ -14,7 +14,7 @@ import Temp from "./components/OtherPages/Temp";
 import EventBody from "./components/Details/EventBody";
 import VendorEvent from "./components/Profiles/Vendor/vendore";
 import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
-
+import EditEvent from "./components/Homepage/EditEvent";
 const router= createBrowserRouter(
     createRoutesFromElements(
 
@@ -26,9 +26,10 @@ const router= createBrowserRouter(
             <Route path="/Host_profile" element={<HostEvent/>}/>
             <Route path="/applications" element={<HostApp/>}/>
             <Route path="Temp" element={<Temp/>} />
-            <Route path="/Event" element={<EventBody/>} />
             <Route path="/vendor-events" element={<VendorEvent/>}/>
             <Route path='/vendor-products' element={<VendorProductsPage/>}/>
+            <Route path="/events/:eventId" element={<EventBody />} />
+            <Route path="/events/edit/:eventId" element={<EditEvent />} />
             </Route>
 
     )

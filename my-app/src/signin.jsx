@@ -3,6 +3,7 @@ import {auth}  from './firebase';
 import {sendPasswordResetEmail, signInWithEmailAndPassword, setPersistence, inMemoryPersistence, browserLocalPersistence,browserSessionPersistence   } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import {getAuth} from "firebase/auth";
+import NavBar from "./components/Homepage/NavBar";
 
 const Signin = () => {
 
@@ -43,6 +44,7 @@ const Signin = () => {
     };
     return (
         <div>
+            <NavBar/>
             <div className="container">
                 <div className="row justify-content-center align-items-center vh-100 py-5">
                     <div className="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">

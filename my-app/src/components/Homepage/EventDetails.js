@@ -1,36 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from "firebase/database";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import {getAuth} from "firebase/auth";
 import {useAuth} from "../../firebase";
-const EventsList = () => {
-  const [events, setEvents] = useState([]);
-  const user = useAuth();
-  console.log(user)
-  useEffect(() => {
-    const db = getDatabase();
-    const eventsRef = ref(db, 'events');
-
-    // Fetch the data
-    onValue(eventsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        // Convert the data from an object to an array
-        const loadedEvents = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        }));
-        loadedEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-        setEvents(loadedEvents);
-      }
-    });
-
-  }, []);
+const EventsList = ({events,filters}) => {
+  const filteredEvents = events.filter(event => {
+    return (!filters.genre || event.genre === filters.genre) &&
+        (!filters.fromDate || new Date(event.date) >= new Date(filters.fromDate)) &&
+        (!filters.toDate || new Date(event.date) <= new Date(filters.toDate));
+  });
 
   return (
       <div className="row g-4">
         {events.map((event) => (
-            <EventDetails key={event.id} event={event}/>
+            <EventDetails key={event.id}  event={event}/>
         ))}
       </div>
   );
@@ -39,8 +22,9 @@ const EventsList = () => {
 const EventDetails = ({ event }) =>{
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigate = useNavigate();
   const navigateToEditPage = (eventId) => {
-    console.log(eventId);
+    navigate(`/events/edit/${eventId}`);
   }
   return (
       <div className="col-sm-6 col-xl-4">
@@ -56,7 +40,7 @@ const EventDetails = ({ event }) =>{
             <div className="card-body position-relative pt-0">
               <button className="btn btn-xs btn-primary mt-n3" onClick={() => { window.location.href = 'event-details-2.html'; }}>Local Market</button>
               <h6 className="mt-3">
-                <Link to="/Event">{event.title}</Link>
+                <Link key={event.id} to={`/events/${event.id}`}>{event.title}</Link>
               </h6>
               <p className="mb-0 small"><i className="bi bi-calendar-check pe-1"></i> {event.date}</p>
               <p className="small"><i className="bi bi-geo-alt pe-1"></i> {event.location}</p>
@@ -87,5 +71,6 @@ const EventDetails = ({ event }) =>{
       </div>
   );
 }
+
 
 export default EventsList;

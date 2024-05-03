@@ -3,6 +3,7 @@ import {auth, db} from './firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { ref, set} from "firebase/database";
+import NavBar from "./components/Homepage/NavBar";
 
 function Signup(){
 
@@ -48,7 +49,7 @@ function Signup(){
 
     return (
         <div>
-
+            <NavBar/>
             <div className="container">
                 <div className="row justify-content-center align-items-center vh-100 py-5">
                     <div className="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">

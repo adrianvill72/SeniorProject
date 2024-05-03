@@ -2,7 +2,7 @@ import React from 'react';
 
 function EventOverview() {
     return(
-        <section class="py-5">
+        <section className="py-5">
             <div className="container">
                     <div className="row g-4">
                     <div className="col-lg-4">

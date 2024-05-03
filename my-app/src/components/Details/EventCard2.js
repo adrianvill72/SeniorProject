@@ -1,8 +1,14 @@
-import React from 'react';
-
-function EventCard2() {
+import React,{ useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getDatabase, ref, onValue,off } from "firebase/database";
+function EventCard2({ title, image}) {
   return (
-    <section className="py-5 position-relative" style={{backgroundImage: "url(social_v1.1.1/template/assets/images/bg/07.jpg)", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "top center"}}>
+    <section className="py-5 position-relative" style={{
+      backgroundImage: `url(${image})`,
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    }}>
       <div className="bg-overlay bg-dark opacity-8"></div>
       <div className="container">
         <div className="py-5">
@@ -22,7 +28,7 @@ function EventCard2() {
                   <a className="nav-link text-white" href="#!"> Music </a>
                 </li>
               </ul>
-              <h1 className="text-white">The learning conference</h1>
+              <h1 className="text-white">{title}</h1>
             </div>
           </div>
         </div>

@@ -1,16 +1,48 @@
-import React from 'react';
 import EventSearchForm from './EventSearch';
 import EventCard from './EventCard';
+import React, { useState, useEffect } from 'react';
+import {getDatabase, onValue, ref} from "firebase/database";
 
 function EventPage() {
-  return (
+    const [events, setEvents] = useState([]);
+    const [filters, setFilters] = useState({ Location: '', fromDate: '', toDate: '' });
+    const [locations, setLocations] = useState([]);
+
+    useEffect(() => {
+        const db = getDatabase();
+        const eventsRef = ref(db, 'events');
+
+        // Fetch the data
+        onValue(eventsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Convert the data from an object to an array
+                const loadedEvents = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                setEvents(loadedEvents);
+                const uniqueLocations = [...new Set(loadedEvents.map(event => event.location))];
+                setLocations(uniqueLocations);
+            }
+
+        });
+    }, []);
+
+    const handleSearch = (e, { locations, fromDate, toDate }) => {
+        e.preventDefault(); // Prevent the default form submission action
+        setFilters({ locations, fromDate, toDate });
+    };
+
+
+    return (
     <main>
-      <EventSearchForm />
+      <EventSearchForm locations={locations} handleSearch={handleSearch}/>
       <section className="pt-5">
         <div className="container">
           <div className="row g-4">
             <div className="col-12 vstack gap-4">
-              <EventCard />
+              <EventCard events={events} filters={filters} />
             </div>
           </div>
         </div>
