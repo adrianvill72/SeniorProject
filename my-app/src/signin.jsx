@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {auth}  from './firebase';
-import {sendPasswordResetEmail, signInWithEmailAndPassword, setPersistence, inMemoryPersistence, browserLocalPersistence,browserSessionPersistence   } from 'firebase/auth';
+import {sendPasswordResetEmail, signInWithEmailAndPassword, setPersistence, browserLocalPersistence,browserSessionPersistence   } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import {getAuth} from "firebase/auth";
 import NavBar from "./components/Homepage/NavBar";

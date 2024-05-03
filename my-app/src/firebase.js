@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth";
 import { getDatabase, onValue} from "firebase/database";
-import { ref, get} from "firebase/database";
-import { getStorage } from "firebase/storage";
+import { ref} from "firebase/database";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyB407uFF7J_X9Z9RAcqA6jaa57ohtwvpjA",

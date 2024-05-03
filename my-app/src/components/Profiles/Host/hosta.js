@@ -1,10 +1,8 @@
 import React from 'react';
 import VendorApp from './vendorapp';
 import HostInfo from './HostInfo';
-import { getAuth } from "firebase/auth";
 import NavBar from "../../Homepage/NavBar";
 const HostApp = () => {
-    const user=getAuth();
     return (
         <main>
             <div className="container">

@@ -15,12 +15,10 @@ import EventBody from "./components/Details/EventBody";
 import VendorEvent from "./components/Profiles/Vendor/vendore";
 import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
 import EditEvent from "./components/Homepage/EditEvent";
-import MyEvents from "./components/Profiles/Host/myevents";
 
 const router= createBrowserRouter(
     createRoutesFromElements(
-
-            <Route path={"/"} element={<App />}>
+        <Route path={"/"} element={<App />}>
             <Route path="signup" element={<Signup/>}/>
             <Route path="signin" element={<Signin/>}/>
             <Route path="/" element={<Protected/>}/>
@@ -28,13 +26,11 @@ const router= createBrowserRouter(
             <Route path="/Host_profile" element={<HostEvent/>}/>
             <Route path="/applications" element={<HostApp/>}/>
             <Route path="Temp" element={<Temp/>} />
-            <Route path="/vendor-events" element={<VendorEvent/>}/>
-            <Route path='/vendor-products' element={<VendorProductsPage/>}/>
+            <Route path="/vendor-profile-events" element={<VendorEvent/>}/>
+            <Route path='/vendor-profile' element={<VendorProductsPage/>}/>
             <Route path="/events/:eventId" element={<EventBody />} />
             <Route path="/events/edit/:eventId" element={<EditEvent />} />
-
-            </Route>
-
+        </Route>
     )
 )
 

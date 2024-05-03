@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
-function EventSearchForm({ handleSearch }) {
-  const [genre, setGenre] = useState('');
-  const [fromDate, setFromDate] = useState('');
+function EventSearchForm({ handleSearch, locations}) {
+  const today = new Date().toISOString().split('T')[0];
+  const [location, setLocation] = useState('');
+  const [fromDate, setFromDate] = useState(today);
   const [toDate, setToDate] = useState('');
 
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch({ location, fromDate, toDate });
+  };
   return (
       <section className="pt-5 pb-0 position-relative" style={{
         backgroundImage: 'url(social_v1.1.1/template/assets/images/bg/07.jpg)',
@@ -23,19 +27,14 @@ function EventSearchForm({ handleSearch }) {
                   <p className="text-white">Let's uncover the best places to eat, drink, and shop nearest to you.</p>
                 </div>
                 <div className="mx-auto bg-mode shadow rounded p-4 mt-5">
-                  <form className="row align-items-end g-4" onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSearch({genre, fromDate, toDate});
-                  }}>
+                  <form className="row align-items-end g-4" onSubmit={handleSubmit}>
                     <div className="col-sm-6 col-lg-3">
                       <label className="form-label">Select Location</label>
-                      <select className="form-select" value={genre} onChange={e => setGenre(e.target.value)}>
-                        <option value="">All Categories</option>
-                        <option value="comedy">Comedy</option>
-                        <option value="dance">Dance</option>
-                        <option value="family">Family</option>
-                        <option value="music">Music</option>
-                        <option value="workshop">Workshop</option>
+                      <select className="form-select" value={location} onChange={e => setLocation(e.target.value)}>
+                        <option value="">All Locations</option>
+                        {locations.map(loc => (
+                            <option key={loc} value={loc}>{loc}</option>
+                        ))}
                       </select>
                     </div>
                     <div className="col-sm-6 col-lg-3">

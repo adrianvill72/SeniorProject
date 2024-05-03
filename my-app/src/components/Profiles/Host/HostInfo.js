@@ -52,7 +52,10 @@ const HostInfo = () => {
                             <i className="bi bi-patch-check-fill text-success small"></i> : null}
                         </h1>
                         <i className="bi bi-briefcase me-1"> Host</i>
-                        <p>About Me: {user?.aboutMe || "Update your profile to add more information."}</p>
+                        <p><div>About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
+                            <div>Contact Me: {user?.email ? <a href={`mailto:${user.email}`}>{user.email}</a> : "Update your profile to add more information."}</div>
+                        </p>
+
                     </div>
                     <div className="d-flex mt-3 justify-content-center ms-sm-auto">
                         <button className="btn btn-danger-soft me-2" type="button" onClick={handleEditClick}>
@@ -84,7 +87,7 @@ const HostInfo = () => {
 
 const EditProfilePage = ({onCancel}) => {
     const db = getDatabase();
-    const {user, setUser} = useAuth();
+    const {user} = useAuth();
     const [name, setName] = useState(user?.name || '');
     const [email, setEmail] = useState(user?.email || '');
     const [aboutMe, setAboutMe] = useState(user?.aboutMe || '');

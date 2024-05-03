@@ -34,7 +34,7 @@ const UserNavBar = () => {
     const userToken = sessionStorage.getItem('token');
     console.log("User Token: ",userToken)
     const {user} = useAuth();
-    const profileLink = user.isHost ? "/Host_profile" : "/Temp";
+    const profileLink = user.isHost ? "/Host_profile" : "/vendor-profile";
     return (
         <nav className="navbar navbar-expand-lg">
             <div className="container">

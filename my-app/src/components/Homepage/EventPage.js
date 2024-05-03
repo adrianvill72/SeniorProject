@@ -24,14 +24,16 @@ function EventPage() {
                 setEvents(loadedEvents);
                 const uniqueLocations = [...new Set(loadedEvents.map(event => event.location))];
                 setLocations(uniqueLocations);
+
             }
 
         });
     }, []);
 
-    const handleSearch = (e, { locations, fromDate, toDate }) => {
-        e.preventDefault(); // Prevent the default form submission action
-        setFilters({ locations, fromDate, toDate });
+
+    const handleSearch = ({ location, fromDate, toDate }) => {
+        console.log("Filters applied:", location, fromDate, toDate);
+        setFilters({ location, fromDate, toDate });
     };
 
 

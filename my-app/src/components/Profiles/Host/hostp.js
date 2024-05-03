@@ -1,11 +1,8 @@
 import React from 'react';
 import MyEvents from './myevents';
 import HostInfo from './HostInfo';
-import {useAuth} from "../../../firebase";
 import NavBar from "../../Homepage/NavBar";
-import {Link} from "react-router-dom";
 const HostEvent = () => {
-    const user=useAuth();
 
     return (
         <main>

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import ModalCreateEvents from '../../Homepage/ModalCreateEvents';
 import { getDatabase, ref, query, orderByChild, equalTo, onValue } from 'firebase/database';
 
 const EventCreationButton = () => {

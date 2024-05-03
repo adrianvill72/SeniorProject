@@ -16,6 +16,7 @@ const EventCreationButton = () => {
 };
 
 function EventCard({events,filters}) {
+    console.log("Event card filters: ", filters)
     return (
         <div className="card">
             <div

@@ -5,14 +5,14 @@ import {getAuth} from "firebase/auth";
 import {useAuth} from "../../firebase";
 const EventsList = ({events,filters}) => {
   const filteredEvents = events.filter(event => {
-    return (!filters.genre || event.genre === filters.genre) &&
+    return (!filters.location || event.location === filters.location) &&
         (!filters.fromDate || new Date(event.date) >= new Date(filters.fromDate)) &&
         (!filters.toDate || new Date(event.date) <= new Date(filters.toDate));
   });
 
   return (
       <div className="row g-4">
-        {events.map((event) => (
+        {filteredEvents.map((event) => (
             <EventDetails key={event.id}  event={event}/>
         ))}
       </div>
@@ -26,6 +26,15 @@ const EventDetails = ({ event }) =>{
   const navigateToEditPage = (eventId) => {
     navigate(`/events/edit/${eventId}`);
   }
+  const copyToClipboard = (eventId) => {
+    const url = `${window.location.origin}/events/${eventId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Link copied to clipboard!');
+    }, (err) => {
+      console.error('Failed to copy: ', err);
+      alert('Failed to copy the link.');
+    });
+  };
   return (
       <div className="col-sm-6 col-xl-4">
           <div className="card h-100">
@@ -38,7 +47,7 @@ const EventDetails = ({ event }) =>{
               )}
             </div>
             <div className="card-body position-relative pt-0">
-              <button className="btn btn-xs btn-primary mt-n3" onClick={() => { window.location.href = 'event-details-2.html'; }}>Local Market</button>
+              <button className="btn btn-xs btn-primary mt-n3" >Local Market</button>
               <h6 className="mt-3">
                 <Link key={event.id} to={`/events/${event.id}`}>{event.title}</Link>
               </h6>
@@ -57,12 +66,11 @@ const EventDetails = ({ event }) =>{
                     <i className="bi bi-share-fill"></i>
                   </button>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="eventActionShare">
-                    <li><button className="dropdown-item" onClick={() => { /* Your logic here */ }}><i className="bi bi-envelope"></i> Send via Direct Message</button></li>
-                    <li><button className="dropdown-item" onClick={() => { /* Your logic here */ }}><i className="bi bi-bookmark-check"></i> Share to News Feed</button></li>
-                    <li><button className="dropdown-item" onClick={() => { /* Your logic here */ }}><i className="bi bi-people"></i> Share to a group</button></li>
-                    <li><button className="dropdown-item" onClick={() => { /* Your logic here */ }}><i className="bi bi-share"></i> Share post via …</button></li>
-                    <li><hr className="dropdown-divider" /></li>
-                    <li><button className="dropdown-item" onClick={() => { /* Your logic here */ }}><i className="bi bi-person"></i> Share on a friend's profile</button></li>
+                    <li>
+                      <button className="dropdown-item" onClick={() => copyToClipboard(event.id)}><i
+                          className="bi bi-clipboard"></i> Share Link
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>

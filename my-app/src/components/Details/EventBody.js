@@ -6,25 +6,38 @@ import { getDatabase, ref, onValue,off } from "firebase/database";
 import NavBar from "../Homepage/NavBar";
 
 
-function EventBody (){
+function EventBody() {
     const { eventId } = useParams();
     const [eventData, setEventData] = useState(null);
+
     useEffect(() => {
         const db = getDatabase();
         const eventsRef = ref(db, `events/${eventId}`);
-        onValue(eventsRef, (snapshot) => {
-            const eventData = snapshot.val();
-            console.log(eventData.image)
-            setEventData(eventData);
+        const unsubscribe = onValue(eventsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // console.log("Fetched Event Data:", data);
+                setEventData(data);
+            } else {
+                console.log("No event data available for eventId:", eventId);
+            }
+        }, (error) => {
+            console.error("Error fetching event data:", error);
         });
 
-        return () => off(eventsRef);
+        return () => {
+            off(eventsRef, 'value', unsubscribe);
+        };
     }, [eventId]);
 
-    if (!eventData) return <div>Loading...</div>;
-    return(
+    console.log("eventData at eventbody", eventData)
+    if (!eventData) {
+        return <div>Loading...</div>; // Make sure this is showing adequately during load
+    }
+
+    return (
         <main>
-           <NavBar/>
+            <NavBar />
             <EventCard2 title={eventData.title} image={eventData.image}/>
             <EventOverview data={eventData}/>
         </main>
