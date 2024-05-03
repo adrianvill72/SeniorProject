@@ -16,6 +16,7 @@ import VendorEvent from "./components/Profiles/Vendor/vendore";
 import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
 import EditEvent from "./components/Homepage/EditEvent";
 import MyEvents from "./components/Profiles/Host/myevents";
+
 const router= createBrowserRouter(
     createRoutesFromElements(
 
