@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {getDatabase, ref, update, onValue, off} from 'firebase/database';
 
-const EditEvent = () => {
-    const { eventId } = useParams();
+const EditProduct = () => {
+    const { productId } = useParams();
     const navigate = useNavigate();
     const db = getDatabase();
-    const [event, setEvent] = useState({
+    const [product, setproduct] = useState({
         title: '',
         location: '',
         date: '',
@@ -14,19 +14,19 @@ const EditEvent = () => {
     });
 
     useEffect(() => {
-        const eventRef = ref(db, `events/${eventId}`);
-        onValue(eventRef, (snapshot) => {
-            setEvent(snapshot.val());
+        const productRef = ref(db, `products/${productId}`);
+        onValue(productRef, (snapshot) => {
+            setproduct(snapshot.val());
         });
 
         return () => {
-            return () => off(eventRef);
+            return () => off(productRef);
         };
-    }, [eventId, db]);
+    }, [productId, db]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEvent(prevState => ({
+        setproduct(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -35,12 +35,12 @@ const EditEvent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await update(ref(db, `events/${eventId}`), event);
-            alert('Event updated successfully');
-            navigate(`/events/${eventId}`); // Navigate back to the event detail page or wherever appropriate
+            await update(ref(db, `products/${productId}`), product);
+            alert('product updated successfully');
+            navigate(`/vendor-profile`); // Navigate back to the product detail page or wherever appropriate
         } catch (error) {
-            console.error('Error updating event:', error);
-            alert('Failed to update event.');
+            console.error('Error updating product:', error);
+            alert('Failed to update product.');
         }
     };
 
@@ -48,35 +48,35 @@ const EditEvent = () => {
         <div className="container">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="title">Event Title</label>
+                    <label htmlFor="title">Product Title</label>
                     <input
                         type="text"
                         className="form-control"
                         id="title"
                         name="title"
-                        value={event.title}
+                        value={product.title}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="location">Event Location</label>
+                    <label htmlFor="description">Product Description</label>
                     <input
                         type="text"
                         className="form-control"
-                        id="location"
-                        name="location"
-                        value={event.location}
+                        id="description"
+                        name="description"
+                        value={product.description}
                         onChange={handleChange}
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="date">Event Date</label>
+                    <label htmlFor="date">Product Price</label>
                     <input
-                        type="date"
+                        type="text"
                         className="form-control"
-                        id="date"
-                        name="date"
-                        value={event.date}
+                        id="price"
+                        name="price"
+                        value={product.price}
                         onChange={handleChange}
                     />
                 </div>
@@ -86,4 +86,4 @@ const EditEvent = () => {
     );
 };
 
-export default EditEvent;
+export default EditProduct;
