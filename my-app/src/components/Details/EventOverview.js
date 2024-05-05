@@ -1,10 +1,11 @@
 import React from 'react';
 import  useFetchUser  from '../../hooks/useFetchUser';
+import { Link } from 'react-router-dom';
 function EventOverview({ data }) {
 
     console.log("eventData at eventoverview", data);
     const creatorDetails = useFetchUser(data.creator);
-    console.log("Participant IDs:", data.participants);
+    console.log("creatorDetails:", data.creator);
     const participantsDetails = useFetchUser(data.participants);
     console.log("participantsDetails", participantsDetails);
     if (!data) {
@@ -12,7 +13,7 @@ function EventOverview({ data }) {
     }
 
     if (!creatorDetails) {
-        return <div>Loading creator details...</div>;  // Handles loading state for creator info
+        return <div>Loading creator details...</div>;
     }
 
     return(
@@ -44,16 +45,18 @@ function EventOverview({ data }) {
                         <div className="card card-body">
                             <h4>Description</h4>
                             <p>{data.description || 'No description available'}</p>
-
                             <div className="mt-4 mt-sm-5">
                                 <h4>Host</h4>
                                 <div className="row g-4">
                                     <div className="d-flex align-items-center">
                                         <div className="avatar avatar-lg me-3">
-                                            <img className="avatar-img rounded-circle" src={creatorDetails.profileImage} alt="Host Avatar" />
+                                            <img className="avatar-img rounded-circle" src={creatorDetails.profileImage}
+                                                 alt="Host Avatar"/>
                                         </div>
                                         <div>
-                                            <h6 className="mb-0">{creatorDetails.name || 'Host name not available'}</h6>
+                                            <h6 className="mb-0">
+                                                <Link to={`/profile/${data.creator}`}>{creatorDetails.name}</Link>
+                                            </h6>
                                             <span>{creatorDetails.title || 'Event Host/Manager'}</span>
                                         </div>
                                     </div>

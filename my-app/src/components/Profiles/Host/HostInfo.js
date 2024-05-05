@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {getDatabase,  update ,ref} from "firebase/database";
-import {Link} from "react-router-dom";
-const HostInfo = () => {
+
+import { useParams } from 'react-router-dom';
+const HostInfo = ({ user, onComponentSwitch  }) => {
     const [editMode, setEditMode] = useState(false);
-    const { user } = useAuth();
-
+    const { userId } = useParams();
     const profileImage = user?.profileImage || "assets/images/avatar/default.jpg";
-
+    const currentUser=useAuth().user;
+    let currentUserID=null;
+    if(currentUser){
+        currentUserID=currentUser.uid;
+    }
     const handleEditClick = () => {
         setEditMode(true);
     };
@@ -18,7 +22,7 @@ const HostInfo = () => {
     };
 
     if (editMode) {
-        return <EditProfilePage onCancel={handleCancel} />;
+        return <EditProfilePage user={user} onCancel={handleCancel} />;
     }
 
     return (
@@ -26,7 +30,7 @@ const HostInfo = () => {
             <div
                 className="h-200px rounded-top"
                 style={{
-                    backgroundImage: `url(assets/images/bg/05.jpg)`,
+                    backgroundImage: `url(/assets/images/bg/05.jpg)`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat"
@@ -58,27 +62,24 @@ const HostInfo = () => {
 
                     </div>
                     <div className="d-flex mt-3 justify-content-center ms-sm-auto">
+                        {user && currentUserID === userId && (
                         <button className="btn btn-danger-soft me-2" type="button" onClick={handleEditClick}>
                             <i className="bi bi-pencil-fill pe-1"></i> Edit profile
                         </button>
-
+                            )}
                     </div>
 
                 </div>
-                <div className="card-footer mt-3 pt-2 pb-0">
-                    <ul className="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/Host_profile">
-                                Events
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/applications">
-                                Applications <span
-                                className="badge bg-success bg-opacity-10 text-success small"> 1</span>
-                            </Link>
-                        </li>
-                    </ul>
+                <div className="card-footer pt-2 pb-0">
+                    <div className="d-flex ">
+                        <button className="btn btn-secondary-soft btn-sm mb-2 me-2" onClick={() => onComponentSwitch(false)}>
+                            Show {user.name}'s Events
+                        </button>
+
+                        <button className="btn btn-secondary-soft btn-sm mb-2 me-2" onClick={() => onComponentSwitch(true)}>
+                            Show Vendor Applications
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

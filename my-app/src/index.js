@@ -8,13 +8,13 @@ import Signup from "./signup"
 import Signin from "./signin"
 import Protected from "./Protected";
 import Home from "./home";
-import HostEvent from "./components/Profiles/Host/hostp";
 import HostApp from "./components/Profiles/Host/hosta";
 import Temp from "./components/OtherPages/Temp";
 import EventBody from "./components/Details/EventBody";
 import VendorEvent from "./components/Profiles/Vendor/vendore";
-import VendorProductsPage from "./components/Profiles/Vendor/vendorp";
 import EditEvent from "./components/Homepage/EditEvent";
+import UserProfile from "./components/Profiles/userProfile";
+import HostEvent from "./components/Profiles/Host/hostp";
 
 const router= createBrowserRouter(
     createRoutesFromElements(
@@ -23,13 +23,16 @@ const router= createBrowserRouter(
             <Route path="signin" element={<Signin/>}/>
             <Route path="/" element={<Protected/>}/>
             <Route path="/" index element={<Home/>}/>
-            <Route path="/Host_profile" element={<HostEvent/>}/>
-            <Route path="/applications" element={<HostApp/>}/>
+            <Route path="profile/:userId" element={<UserProfile />}>
+                <Route path="host" element={<HostEvent />} />
+                <Route path="vendor" element={<VendorEvent />} />
+            </Route>
+            <Route element={<Protected />}>
+                <Route path="/events/edit/:eventId" element={<EditEvent />} />
+            </Route>
+            <Route path="/applications/" element={<HostApp/>}/>
             <Route path="Temp" element={<Temp/>} />
-            <Route path="/vendor-profile-events" element={<VendorEvent/>}/>
-            <Route path='/vendor-profile' element={<VendorProductsPage/>}/>
             <Route path="/events/:eventId" element={<EventBody />} />
-            <Route path="/events/edit/:eventId" element={<EditEvent />} />
         </Route>
     )
 )

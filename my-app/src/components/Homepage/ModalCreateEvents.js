@@ -67,11 +67,15 @@ function ModalCreateEvents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const completeLocation = `${eventData.address}, ${eventData.city}, ${eventData.state}`;
+    if (!eventData.address || !eventData.city || !eventData.state) {
+      alert("Please fill in all location fields.");
+      return;
+    }
+    const completeLocation = `${eventData.address} ${eventData.city}, ${eventData.state}`;
     try {
       await set(newEventRef, {
         ...eventData,
-        location: completeLocation,  // Store as a single string or adjust as per your DB schema
+        location: completeLocation,
         creator: user.uid
       });
       alert("Event successfully created!");
@@ -126,14 +130,20 @@ function ModalCreateEvents() {
                          value={eventData.address} onChange={handleChange}/>
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label">City</label>
-                  <input type="text" className="form-control" placeholder="Edinburg" name="city"
-                         value={eventData.city} onChange={handleChange}/>
+                  <label className="form-label">State</label>
+                  <select className="form-control" name="state" value={eventData.state} onChange={handleChange}>
+                    <option value="">Select State</option>
+                    <option value="TX">Texas</option>
+                  </select>
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label">State</label>
-                  <input type="text" className="form-control" placeholder="TX" name="state"
-                         value={eventData.state} onChange={handleChange}/>
+                  <label className="form-label">City</label>
+                  <select className="form-control" name="city" value={eventData.city} onChange={handleChange}>
+                    <option value="">Select City</option>
+                    <option value="Brownsville">Brownsville</option>
+                    <option value="Edinburg">Edinburg</option>
+                    <option value="McAllen">McAllen</option>
+                  </select>
                 </div>
                 <div className="col-12">
                   <label className="form-label">Participating Vendors</label>

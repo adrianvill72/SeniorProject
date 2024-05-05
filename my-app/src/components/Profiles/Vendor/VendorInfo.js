@@ -3,12 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {getDatabase,  update ,ref} from "firebase/database";
-import {Link} from "react-router-dom";
-const VendorInfo = () => {
+const VendorInfo = ({ user, onComponentSwitch  }) => {
     const [editMode, setEditMode] = useState(false);
-    const { user } = useAuth();
 
-    const profileImage = user?.profileImage || "assets/images/avatar/default.jpg";
+    const profileImage = user?.profileImage || "/assets/images/avatar/default.jpg";
 
     const handleEditClick = () => {
         setEditMode(true);
@@ -27,7 +25,7 @@ const VendorInfo = () => {
             <div
                 className="h-200px rounded-top"
                 style={{
-                    backgroundImage: `url(assets/images/bg/05.jpg)`,
+                    backgroundImage: `url(/assets/images/bg/05.jpg)`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat"
@@ -53,8 +51,10 @@ const VendorInfo = () => {
                             <i className="bi bi-patch-check-fill text-success small"></i> : null}
                         </h1>
                         <i className="bi bi-briefcase me-1"> Vendor</i>
-                        <p><div>About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
-                            <div>Contact Me: {user?.email ? <a href={`mailto:${user.email}`}>{user.email}</a> : "Update your profile to add more information."}</div>
+                        <p>
+                            <div>About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
+                            <div>Contact Me: {user?.email ?
+                                <a href={`mailto:${user.email}`}>{user.email}</a> : "Update your profile to add more information."}</div>
                         </p>
                     </div>
                     <div className="d-flex mt-3 justify-content-center ms-sm-auto">
@@ -65,20 +65,17 @@ const VendorInfo = () => {
                     </div>
 
                 </div>
-                <div className="card-footer mt-3 pt-2 pb-0">
-                    <ul className="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/vendor-profile">
-                                Products
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/vendor-profile-events">
-                                Attending Events <span
-                                className="badge bg-success bg-opacity-10 text-success small"> 1</span>
-                            </Link>
-                        </li>
-                    </ul>
+                <div className="card-footer pt-2 pb-0">
+                    <div className="d-flex ">
+                        <button className="btn btn-secondary-soft btn-sm mb-2 me-2"
+                                onClick={() => onComponentSwitch(false)}>
+                            Products
+                        </button>
+                        <button className="btn btn-secondary-soft btn-sm mb-2 me-2"
+                                onClick={() => onComponentSwitch(true)}>
+                            Attending Events
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

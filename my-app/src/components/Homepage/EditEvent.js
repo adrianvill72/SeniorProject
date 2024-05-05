@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {getDatabase, ref, update, onValue, off} from 'firebase/database';
+import {getDatabase, ref, update, onValue, off,remove} from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const EditEvent = () => {
@@ -44,7 +44,19 @@ const EditEvent = () => {
             alert('Failed to update event.');
         }
     };
-
+    const handleDelete = async () => {
+        try {
+            await remove(ref(db, `events/${eventId}`));
+            alert('Event deleted successfully');
+            navigate('/'); // Navigate to home or other appropriate path
+        } catch (error) {
+            console.error('Error deleting event:', error);
+            alert('Failed to delete event.');
+        }
+    };
+    const handleCancel = async () => {
+        navigate('/'); // Navigate to home or other appropriate path
+    };
     return (
         <div className="container">
             <form onSubmit={handleSubmit}>
@@ -81,7 +93,11 @@ const EditEvent = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Save Changes</button>
+                <button type="submit" style={{ marginRight: '10px' }} className="btn btn-primary">Save Changes</button>
+                <button type="submit" className="btn btn-secondary" onClick={handleCancel}>Cancel Changes</button>
+                <button type="submit" style={{float: 'right'}} className=" btn btn-danger" onClick={handleDelete}>DELETE
+                    EVENT
+                </button>
             </form>
         </div>
     );

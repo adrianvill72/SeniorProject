@@ -5,8 +5,9 @@ import {getDatabase, onValue, ref} from "firebase/database";
 
 function EventPage() {
     const [events, setEvents] = useState([]);
-    const [filters, setFilters] = useState({ Location: '', fromDate: '', toDate: '' });
-    const [locations, setLocations] = useState([]);
+    const [filters, setFilters] = useState({ city: '', state: '', fromDate: '', toDate: '' });
+    const [cities, setCities] = useState([]);
+    const [states, setStates] = useState([]);
 
     useEffect(() => {
         const db = getDatabase();
@@ -16,30 +17,35 @@ function EventPage() {
         onValue(eventsRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // Convert the data from an object to an array
                 const loadedEvents = Object.keys(data).map(key => ({
                     id: key,
                     ...data[key]
                 }));
                 setEvents(loadedEvents);
-                const uniqueLocations = [...new Set(loadedEvents.map(event => event.location))];
-                setLocations(uniqueLocations);
 
+                // Extract unique cities and states
+                const citySet = new Set();
+                const stateSet = new Set();
+                loadedEvents.forEach(event => {
+                    if (event.city) citySet.add(event.city);
+                    if (event.state) stateSet.add(event.state);
+                });
+
+                setCities(Array.from(citySet));
+                setStates(Array.from(stateSet));
             }
-
         });
     }, []);
 
-
-    const handleSearch = ({ location, fromDate, toDate }) => {
-        console.log("Filters applied:", location, fromDate, toDate);
-        setFilters({ location, fromDate, toDate });
+    const handleSearch = ({ city, state, fromDate, toDate }) => {
+        console.log("Filters applied:", city, state, fromDate, toDate);
+        setFilters({ city, state, fromDate, toDate });
     };
 
 
     return (
     <main>
-      <EventSearchForm locations={locations} handleSearch={handleSearch}/>
+    <EventSearchForm cities={cities} states={states} handleSearch={handleSearch}/>
       <section className="pt-5">
         <div className="container">
           <div className="row g-4">

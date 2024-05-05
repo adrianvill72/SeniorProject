@@ -2,17 +2,23 @@ import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {getAuth} from "firebase/auth";
 
-const EventsList = ({events,filters}) => {
+const EventsList = ({events, filters}) => {
   const filteredEvents = events.filter(event => {
-    return (!filters.location || event.location === filters.location) &&
+    return (
+        (!filters.city || event.city === filters.city) && // Filter by city
+        (!filters.state || event.state === filters.state) && // Filter by state
         (!filters.fromDate || new Date(event.date) >= new Date(filters.fromDate)) &&
-        (!filters.toDate || new Date(event.date) <= new Date(filters.toDate));
+        (!filters.toDate || new Date(event.date) <= new Date(filters.toDate))
+    );
   });
+
+  // Sort events by date in ascending order
+  filteredEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return (
       <div className="row g-4">
         {filteredEvents.map((event) => (
-            <EventDetails key={event.id}  event={event}/>
+            <EventDetails key={event.id} event={event}/>
         ))}
       </div>
   );

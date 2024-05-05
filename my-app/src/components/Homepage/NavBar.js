@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useAuth,SignOutUser}  from '../../firebase';
 
 
@@ -31,10 +31,15 @@ const GuestNavBar = () => {
     );
 }
 const UserNavBar = () => {
-    const userToken = sessionStorage.getItem('token');
-    console.log("User Token: ",userToken)
     const {user} = useAuth();
-    const profileLink = user.isHost ? "/Host_profile" : "/vendor-profile";
+    console.log(user)
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        SignOutUser().then(() => {
+            // Redirect to homepage on successful sign-out
+            navigate('/');
+        })
+    };
     return (
         <nav className="navbar navbar-expand-lg">
             <div className="container">
@@ -54,9 +59,9 @@ const UserNavBar = () => {
                             <a className="nav-link dropdown-toggle" href="#" id="postMenu" data-bs-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">Account </a>
                             <ul className="dropdown-menu" aria-labelledby="postMenu">
-                                {user.isVendor && (
-                                    <li><Link className="dropdown-item" to="/Temp">Create Store</Link></li>
-                                )}
+                                <li>
+                                    <Link className="dropdown-item" to={`/profile/${user.uid}`}>My Profile</Link>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -81,12 +86,12 @@ const UserNavBar = () => {
                                         <p className="small m-0">{user.isHost ? "Host" : "Vendor"}</p>
                                     </div>
                                 </div>
-                                <Link to={profileLink} className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center">
+                                <Link to={`/profile/${user.uid}`} className="dropdown-item btn btn-primary-soft btn-sm my-2 text-center">
                                     View profile
                                 </Link>
                             </li>
                             <li className="dropdown-divider"></li>
-                            <button className="dropdown-item bg-danger-soft-hover" onClick={SignOutUser}>
+                            <button className="dropdown-item bg-danger-soft-hover" onClick={handleLogout}>
                                 Sign Out</button>
                             <li>
                                 <hr className="dropdown-divider"/>

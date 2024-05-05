@@ -18,20 +18,14 @@ const Signin = () => {
         const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
         try {
             await setPersistence(auth, persistenceType);
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log(userCredential);
-            const user = userCredential.user;
-            if (rememberMe) {
-                localStorage.setItem('user', JSON.stringify(user));
-            } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-            }
-            navigate("/");
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate("/");  // Navigate to the home page or dashboard after successful login
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            setError(error.message);  // Show user-friendly error messages
         }
     }
+
     const handleResetPassword = async () => {
         const auth = getAuth();
         sendPasswordResetEmail(auth, email)
