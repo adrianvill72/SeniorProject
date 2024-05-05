@@ -1,6 +1,5 @@
-import React,{ useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getDatabase, ref, onValue,off } from "firebase/database";
+import React from 'react';
+
 function EventCard2({ title, image}) {
 console.log("image inside eventcard2",image)
 

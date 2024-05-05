@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { getDatabase, ref, onValue } from "firebase/database";
-import { Link, useNavigate} from 'react-router-dom';
+import React from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import {getAuth} from "firebase/auth";
-import {useAuth} from "../../firebase";
+
 const EventsList = ({events,filters}) => {
   const filteredEvents = events.filter(event => {
     return (!filters.location || event.location === filters.location) &&
@@ -41,13 +40,14 @@ const EventDetails = ({ event }) =>{
             <div className="position-relative">
               <img className="imgfluid rounded-top" src={event.image} alt="" />
               {user && user.uid === event.creator && (
-                  <div className="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
-                    <button onClick={() => navigateToEditPage(event.id)}>Edit</button>
+                  <div className="badge bg-danger mt-2 me-2 position-absolute top-0 end-0">
+                    <button className="btn btn-xs btn-danger" onClick={() => navigateToEditPage(event.id)}>Edit</button>
                   </div>
               )}
+
             </div>
             <div className="card-body position-relative pt-0">
-              <button className="btn btn-xs btn-primary mt-n3" >Local Market</button>
+              <div className="btn btn-xs btn-primary mt-n3" >Local Market</div>
               <h6 className="mt-3">
                 <Link key={event.id} to={`/events/${event.id}`}>{event.title}</Link>
               </h6>

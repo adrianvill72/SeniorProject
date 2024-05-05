@@ -18,10 +18,13 @@ function ModalCreateEvents() {
     date: '',
     time: '',
     duration: '',
-    location: '',
+    address: '',
+    city: '',
+    state: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s',
-    participants: ['']  // Added to track participating vendors/stores
+    participants: []  // Array of vendor IDs
   });
+
   const [vendors, setVendors] = useState([]);
 
   const handleChange = (e) => {
@@ -64,8 +67,13 @@ function ModalCreateEvents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const completeLocation = `${eventData.address}, ${eventData.city}, ${eventData.state}`;
     try {
-      await set(newEventRef, {...eventData, creator: user.uid });
+      await set(newEventRef, {
+        ...eventData,
+        location: completeLocation,  // Store as a single string or adjust as per your DB schema
+        creator: user.uid
+      });
       alert("Event successfully created!");
     } catch (error) {
       console.error("Failed to create new event: ", error);
@@ -98,7 +106,7 @@ function ModalCreateEvents() {
                   <ReactDatePicker
                       selected={eventData.date}
                       onChange={dateChange}
-                      dateFormat="yyyy-MM-dd"
+                      dateFormat="MM-dd-yyyy"
                       className="form-control"
                   />
                 </div>
@@ -113,9 +121,19 @@ function ModalCreateEvents() {
                          value={eventData.duration} onChange={handleChange}/>
                 </div>
                 <div className="col-12">
-                  <label className="form-label">Location</label>
-                  <input type="text" className="form-control" placeholder="Edinburg, TX 78526" name="location"
-                         value={eventData.location} onChange={handleChange}/>
+                  <label className="form-label">Address</label>
+                  <input type="text" className="form-control" placeholder="1234 Main St" name="address"
+                         value={eventData.address} onChange={handleChange}/>
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">City</label>
+                  <input type="text" className="form-control" placeholder="Edinburg" name="city"
+                         value={eventData.city} onChange={handleChange}/>
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">State</label>
+                  <input type="text" className="form-control" placeholder="TX" name="state"
+                         value={eventData.state} onChange={handleChange}/>
                 </div>
                 <div className="col-12">
                   <label className="form-label">Participating Vendors</label>
@@ -142,4 +160,5 @@ function ModalCreateEvents() {
       </div>
   );
 }
+
 export default ModalCreateEvents;
