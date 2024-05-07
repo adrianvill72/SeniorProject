@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import { getDatabase, set,ref, push} from "firebase/database";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL  } from "firebase/storage";
+import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
+import { getDatabase, ref, push, set } from "firebase/database";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -9,57 +9,41 @@ function ModalCreateEvents() {
   const auth = getAuth();
   const user = auth.currentUser;
   const db = getDatabase();
-  const eventsRef = ref(db, 'events');
-  const newEventRef = push(eventsRef);
+  const storage = getStorage();
 
   const [eventData, setEventData] = useState({
     title: '',
     description: '',
-    date: '',
+    date: null, // Initialize as null for datepicker compatibility
     time: '',
     duration: '',
     address: '',
     city: '',
     state: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s',
-    participants: []  // Array of vendor IDs
+    participants: []  // Ensure participants is always an array
   });
 
-  const [vendors, setVendors] = useState([]);
-
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
+    setEventData(prev => ({ ...prev, [name]: value }));
+  };
 
-    setEventData(prev => ({...prev, [name]: value}));
-  };
-  const dateChange = date => {
-    const formattedDate = date.toISOString().split('T')[0];
-    setEventData(prevState => ({
-      ...prevState,
-      date: formattedDate
-    }));
-  };
-  const handleVendorSelection = (e) => {
-    const selectedId = e.target.value;
-    const isSelected = eventData.participants.includes(selectedId);
-    setEventData(prev => ({
-      ...prev,
-      participants: isSelected ? prev.participants.filter(id => id !== selectedId) : [...prev.participants, selectedId]
-    }));
+  const dateChange = (date) => {
+    setEventData(prev => ({ ...prev, date: date }));
   };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) {
-      console.log("No file selected.");
+      console.error("No file selected.");
       return;
     }
-    const storage = getStorage();
-    const storageReference = storageRef(storage, `events/${file.name}`);
+    const fileRef = storageRef(storage, `events/${new Date().getTime()}_${file.name}`);
     try {
-      const snapshot = await uploadBytes(storageReference, file);
+      const snapshot = await uploadBytes(fileRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      setEventData(prev => ({...prev, image: downloadURL}));
+      setEventData(prev => ({ ...prev, image: downloadURL }));
     } catch (error) {
       console.error("Error uploading image: ", error);
     }
@@ -71,14 +55,28 @@ function ModalCreateEvents() {
       alert("Please fill in all location fields.");
       return;
     }
-    const completeLocation = `${eventData.address} ${eventData.city}, ${eventData.state}`;
+    const eventsRef = ref(db, 'events');
+    const newEventRef = push(eventsRef);
     try {
       await set(newEventRef, {
         ...eventData,
-        location: completeLocation,
-        creator: user.uid
+        location: `${eventData.address}, ${eventData.city}, ${eventData.state}`,
+        creator: user.uid,
+        date: eventData.date ? eventData.date.toISOString().split('T')[0] : null, // Format date or handle null
       });
       alert("Event successfully created!");
+      setEventData({ // Reset form fields
+        title: '',
+        description: '',
+        date: null,
+        time: '',
+        duration: '',
+        address: '',
+        city: '',
+        state: '',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCthRyJ1Sh4X8HyhnyiqJLBxsULXwuz3TaRg&s',
+        participants: []
+      });
     } catch (error) {
       console.error("Failed to create new event: ", error);
     }
@@ -90,7 +88,7 @@ function ModalCreateEvents() {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="modalLabelCreateEvents">Create event</h5>
+              <h5 className="modal-title" id="modalLabelCreateEvents">Create Event</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -145,23 +143,13 @@ function ModalCreateEvents() {
                     <option value="McAllen">McAllen</option>
                   </select>
                 </div>
-                <div className="col-12">
-                  <label className="form-label">Participating Vendors</label>
-                  <select multiple className="form-control" onChange={handleVendorSelection}>
-                    {vendors.map(vendor => (
-                        <option key={vendor.id} value={vendor.id}>
-                          {vendor.name}
-                        </option>
-                    ))}
-                  </select>
-                </div>
                 <div className="mb-3">
                   <label className="form-label">Upload attachment</label>
                   <input onChange={handleImageChange} type="file" className="form-control" name="attachments"/>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-danger-soft me-2" data-bs-dismiss="modal"> Cancel</button>
-                  <button type="submit" className="btn btn-success-soft">Create now</button>
+                  <button type="button" className="btn btn-danger-soft me-2" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" className="btn btn-success-soft">Create Now</button>
                 </div>
               </form>
             </div>

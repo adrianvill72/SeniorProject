@@ -56,7 +56,7 @@ const HostInfo = ({ user, onComponentSwitch  }) => {
                             <i className="bi bi-patch-check-fill text-success small"></i> : null}
                         </h1>
                         <i className="bi bi-briefcase me-1"> Host</i>
-                        <p><div>About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
+                        <p><div className="bold-label">About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
                             <div>Contact Me: {user?.email ? <a href={`mailto:${user.email}`}>{user.email}</a> : "Update your profile to add more information."}</div>
                         </p>
 
@@ -112,6 +112,7 @@ const EditProfilePage = ({onCancel}) => {
             await update(userRef, updatedUserData);
 
             alert('Profile updated successfully.');
+            window.location.reload();
             onCancel(); // Close the modal or navigate away
         } catch (error) {
             console.error('Error updating profile:', error);

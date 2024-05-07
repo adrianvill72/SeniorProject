@@ -27,7 +27,7 @@ const ProductDetails = ({ product }) =>{
                     <img className="imgfluid rounded-top" src={product.image} alt="" />
                     {user && user.uid === product.creator && (
                         <div className="badge bg-danger text-white mt-2 me-2 position-absolute top-0 end-0">
-                            <button onClick={() => navigateToEditPage(product.id)}>Edit</button>
+                            <button className="btn btn-xs btn-danger" onClick={() => navigateToEditPage(product.id)}>Edit</button>
                         </div>
                     )}
                 </div>
@@ -35,7 +35,7 @@ const ProductDetails = ({ product }) =>{
                     <h6 className="mt-3">
                         {product.title}
                     </h6>
-                    <p className="mb-0 small"><i className="bi bi-card-text pe-1"></i>description:  {product.description}</p>
+                    <p className="mb-0 small"><i className="bi bi-card-text pe-1"></i>Description:  {product.description}</p>
                     <p className="small"><i className="bi bi-cash pe-1"></i>$ {product.price}</p>
                 </div>
             </div>

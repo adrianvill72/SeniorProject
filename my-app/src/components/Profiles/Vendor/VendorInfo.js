@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {getDatabase,  update ,ref} from "firebase/database";
+import {getAuth} from "firebase/auth";
+import {useParams} from "react-router-dom";
 const VendorInfo = ({ user, onComponentSwitch  }) => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
     const [editMode, setEditMode] = useState(false);
-
+    const userParam = useParams();
+    const paramsUserID= userParam['userId'];
     const profileImage = user?.profileImage || "/assets/images/avatar/default.jpg";
 
     const handleEditClick = () => {
@@ -52,18 +57,20 @@ const VendorInfo = ({ user, onComponentSwitch  }) => {
                         </h1>
                         <i className="bi bi-briefcase me-1"> Vendor</i>
                         <p>
-                            <div>About Me: {user?.aboutMe || "Update your profile to add more information."}</div>
-                            <div>Contact Me: {user?.email ?
+                            <div className="font-bold"> About Me:</div>
+                            <div> {user?.aboutMe || "Update your profile to add more information."}</div>
+                            <div>Contact Me:</div>
+                            <div> {user?.email ?
                                 <a href={`mailto:${user.email}`}>{user.email}</a> : "Update your profile to add more information."}</div>
                         </p>
                     </div>
+                    {currentUser && currentUser.uid === paramsUserID && (
                     <div className="d-flex mt-3 justify-content-center ms-sm-auto">
                         <button className="btn btn-danger-soft me-2" type="button" onClick={handleEditClick}>
                             <i className="bi bi-pencil-fill pe-1"></i> Edit profile
                         </button>
-
                     </div>
-
+                        )}
                 </div>
                 <div className="card-footer pt-2 pb-0">
                     <div className="d-flex ">
@@ -108,6 +115,7 @@ const EditProfilePage = ({onCancel}) => {
             await update(userRef, updatedUserData);
 
             alert('Profile updated successfully.');
+            window.location.reload();
             onCancel(); // Close the modal or navigate away
         } catch (error) {
             console.error('Error updating profile:', error);

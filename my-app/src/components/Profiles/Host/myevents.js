@@ -12,13 +12,13 @@ const EventCreationButton = () => {
     );
 };
 
+
 const MyEvents = ({ user }) => {
     const currentUser=useAuth().user;
     let currentUserID=null;
     if(currentUser){
          currentUserID=currentUser.uid;
     }
-    console.log("Current User:",currentUser)
     const { userId } = useParams(); // Correctly destructure userId from the URL
     const db = getDatabase();
     const [events, setEvents] = useState([]);
@@ -54,9 +54,6 @@ const MyEvents = ({ user }) => {
         <div className="card">
             <div className="card-header d-sm-flex align-items-center justify-content-between border-0 pb-0">
                 <h5 className="card-title mb-sm-0">My Events</h5>
-                {user && currentUserID === userId && (
-                <EventCreationButton />
-                    )}
             </div>
             <div className="card-body">
                 <div className="row g-4">
@@ -89,13 +86,6 @@ const MyEvents = ({ user }) => {
                                                htmlFor={`Interested${event.id}`}>
                                             <i className="bi bi-thumbs-up"></i> Interested
                                         </label>
-                                    </div>
-                                    <div className="dropdown ms-3">
-                                        <button className="btn btn-sm btn-primary-soft" id="eventActionShare"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                            <i className="bi bi-share-fill"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
