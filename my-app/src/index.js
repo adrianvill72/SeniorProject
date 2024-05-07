@@ -17,27 +17,26 @@ import UserProfile from "./components/Profiles/userProfile";
 import HostEvent from "./components/Profiles/Host/hostp";
 import EditProduct from "./components/Profiles/Vendor/EditProduct";
 
-const router= createBrowserRouter(
+const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route path={"/"} element={<App />}>
+        <Route path="/" element={<App />}>
+            <Route index element={<Home/>} />
             <Route path="signup" element={<Signup/>}/>
             <Route path="signin" element={<Signin/>}/>
-            <Route path="/" element={<Protected/>}/>
-            <Route path="/" index element={<Home/>}/>
             <Route path="profile/:userId" element={<UserProfile />}>
                 <Route path="host" element={<HostEvent />} />
                 <Route path="vendor" element={<VendorEvent />} />
             </Route>
-            <Route element={<Protected />}>
-                <Route path="/events/edit/:eventId" element={<EditEvent />} />
+            <Route path="events">
+                <Route path="edit/:eventId" element={<EditEvent />} />
+                <Route path=":eventId" element={<EventBody />} />
             </Route>
-            <Route path="/applications/" element={<HostApp/>}/>
-            <Route path="Temp" element={<Temp/>} />
-            <Route path="/events/:eventId" element={<EventBody />} />
-            <Route path="/products/edit/:productId" element={<EditProduct />} />
+            <Route path="applications" element={<HostApp/>}/>
+            <Route path="products/edit/:productId" element={<EditProduct />} />
+            <Route path="temp" element={<Temp/>} />
         </Route>
     )
-)
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
