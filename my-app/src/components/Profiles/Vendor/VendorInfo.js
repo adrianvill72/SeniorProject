@@ -12,6 +12,7 @@ const VendorInfo = ({ user, onComponentSwitch  }) => {
     const userParam = useParams();
     const paramsUserID= userParam['userId'];
     const profileImage = user?.profileImage || "/assets/images/avatar/default.jpg";
+    const coverImage = user?.coverImage || "/assets/images/bg/05.jpg";
 
     const handleEditClick = () => {
         setEditMode(true);
@@ -30,7 +31,7 @@ const VendorInfo = ({ user, onComponentSwitch  }) => {
             <div
                 className="h-200px rounded-top"
                 style={{
-                    backgroundImage: `url(/assets/images/bg/05.jpg)`,
+                    backgroundImage: `url(${coverImage})`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat"
@@ -96,16 +97,18 @@ const EditProfilePage = ({onCancel}) => {
     const [email, setEmail] = useState(user?.email || '');
     const [aboutMe, setAboutMe] = useState(user?.aboutMe || '');
     const [profileImage, setProfileImage] = useState(user?.profileImage || "assets/images/avatar/default.jpg");
+    const [coverImage, setCoverImage] = useState(user?.coverImage || "/assets/images/bg/05.jpg");
 
     useEffect(() => {
         setName(user?.name || '');
         setEmail(user?.email || '');
         setAboutMe(user?.aboutMe || '');
         setProfileImage(user?.profileImage || "assets/images/avatar/default.jpg");
+        setCoverImage(user?.coverImage || "/assets/images/bg/05.jpg");
     }, [user]);
 
     const handleSave = async () => {
-        const updatedUserData = {name, email, aboutMe, profileImage};
+        const updatedUserData = {name, email, aboutMe, profileImage, coverImage};
 
         // Reference to the Realtime Database path for the user
         const userRef = ref(db, 'users/' + user.uid);
@@ -140,6 +143,24 @@ const EditProfilePage = ({onCancel}) => {
         }
     };
 
+    const handleCoverImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+            console.log("No file selected.");
+            return;
+        }
+        const storage = getStorage();
+        const storageReference = storageRef(storage, `users/${user.uid}/${file.name}`);
+        try {
+            const snapshot = await uploadBytes(storageReference, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            setCoverImage(downloadURL);
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+        }
+    };
+
+
     return (
         <div className="card">
             <div className="card-header">
@@ -156,6 +177,14 @@ const EditProfilePage = ({onCancel}) => {
                         <input type="file" className="form-control" onChange={handleImageChange}/>
                         <div style={{margin: '10px 0'}}>
                             <img src={profileImage} alt="Profile"
+                                 style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="coverImage">Cover Image</label>
+                        <input type="file" className="form-control" onChange={handleCoverImageChange}/>
+                        <div style={{margin: '10px 0'}}>
+                            <img src={coverImage} alt="Cover"
                                  style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
                         </div>
                     </div>
