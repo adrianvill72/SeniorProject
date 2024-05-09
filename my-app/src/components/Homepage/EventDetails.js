@@ -5,6 +5,7 @@ import {getDatabase, ref, set, get, onValue} from "firebase/database";
 const EventsList = ({events, filters}) => {
   const filteredEvents = events.filter(event => {
     return (
+
         (!filters.city || event.city === filters.city) && // Filter by city
         (!filters.state || event.state === filters.state) && // Filter by state
         (!filters.fromDate || new Date(event.date) >= new Date(filters.fromDate)) &&
