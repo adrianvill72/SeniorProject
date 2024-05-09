@@ -20,13 +20,10 @@ console.log("image inside eventcard2",image)
                     <a className="nav-link text-white" href="#!"> Events</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link text-white" href="#!"> Live Event</a>
+                    <a className="nav-link text-white" href="#!"> Local Market</a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link text-white" href="#!"> Featured </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link text-white" href="#!"> Music </a>
                   </li>
                 </ul>
                 <h1 className="text-white">{title}</h1>

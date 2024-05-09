@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../firebase';
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import {getDatabase, ref, onValue, update, get} from "firebase/database";
 import useFetchUser from '../../hooks/useFetchUser';
 
 function EventOverview({ data }) {
@@ -101,6 +101,25 @@ function EventOverview({ data }) {
 
 const ApplyButton = ({ eventId }) => {
     const { user } = useAuth();
+    const [isClicked, setIsClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkApplicationStatus = async () => {
+            if (user) {
+                const db = getDatabase();
+                const applicationRef = ref(db, `events/${eventId}/applications/${user.uid}`);
+                const snapshot = await get(applicationRef);
+                if (snapshot.exists()) {
+                    setIsClicked(true); // Disable button if application already exists
+                }
+                setIsLoading(false);
+            }
+        };
+
+        checkApplicationStatus();
+    }, [user, eventId]); // Ensure this runs when `user` or `eventId` changes
+
     const handleApply = async () => {
         if (!user || !user.isVendor) {
             console.log("Not authorized or not a vendor");
@@ -111,13 +130,17 @@ const ApplyButton = ({ eventId }) => {
         try {
             await update(applicationRef, { [user.uid]: true });
             console.log("Application submitted successfully");
+            setIsClicked(true);
         } catch (error) {
             console.error("Failed to submit application:", error);
         }
     };
+
+    if (isLoading) return <p>Loading...</p>;
+
     return (
-        <button className="btn btn-primary w-100" onClick={handleApply}>
-            Apply to Event
+        <button className="btn btn-primary w-100" onClick={handleApply} disabled={isClicked}>
+            {isClicked ? 'Applied' : 'Apply to Event'}
         </button>
     );
 };
