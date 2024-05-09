@@ -64,9 +64,6 @@ const Signin = () => {
                                                value={password}
                                                onChange={(e) => setPassword(e.target.value)}
                                         />
-                                        <span className="input-group-text p-0">
-                                        <i className="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
-                                    </span>
                                     </div>
                                 </div>
                                 <div className="mb-3 d-sm-flex justify-content-between">

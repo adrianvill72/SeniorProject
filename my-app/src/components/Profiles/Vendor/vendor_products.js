@@ -60,7 +60,7 @@ function ProductCard({user}) {
 
             </div>
             <div className="card-body">
-                <ProductList products={products} />
+                <ProductList products={products} uid={currentUID} />
             </div>
         </div>
     );

@@ -16,9 +16,6 @@ const firebaseConfig = {
     databaseURL: "https://loma-5a9be-default-rtdb.firebaseio.com/",
 };
 
-
-// Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db =getDatabase(app)
@@ -32,16 +29,16 @@ export const AuthProvider = ({ children }) => {
                 // Fetch additional user data from Firebase
                 const userProfileRef = ref(db, 'users/' + authUser.uid);
                 onValue(userProfileRef, (snapshot) => {
-                    if (auth.currentUser) { // Check if user is still authenticated
+                    if (auth.currentUser) {
                         if (snapshot.exists()) {
                             const userDetails = snapshot.val();
                             setUser({
                                 ...authUser,
-                                ...userDetails // Merge auth user object with database user details
+                                ...userDetails
                             });
                             console.log("Snapshot: ", snapshot.val())
                         } else {
-                            setUser(authUser); // No additional details found, use default auth user
+                            setUser(authUser);
                         }
                     }
                 });

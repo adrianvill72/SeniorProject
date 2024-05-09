@@ -78,16 +78,14 @@ function Signup(){
                                                value={password}
                                                onChange={(e) => setPassword(e.target.value)}
                                         />
-                                        <span className="input-group-text p-0">
-                                        <i className="fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
-                                    </span>
+
                                     </div>
                                 </div>
                                 <div className="mb-3 position-relative">
-                                    <div className="fw-semibold">Input First And Last Name:</div>
+                                    <div className="fw-semibold">Input Business Name:</div>
                                     <div className="input-group input-group-lg">
                                         <input className="form-control" type="text"
-                                               placeholder="First & Last Name"
+                                               placeholder="Business Name"
                                                required
                                                value={name}
                                                onChange={(e) => setName(e.target.value)}

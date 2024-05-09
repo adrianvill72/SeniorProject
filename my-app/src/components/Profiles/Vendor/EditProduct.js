@@ -10,7 +10,8 @@ const EditProduct = () => {
         title: '',
         location: '',
         date: '',
-        image: ''
+        image: '',
+        creator: ''
     });
 
     useEffect(() => {
@@ -37,7 +38,7 @@ const EditProduct = () => {
         try {
             await update(ref(db, `products/${productId}`), product);
             alert('product updated successfully');
-            navigate(`/vendor-profile`); // Navigate back to the product detail page or wherever appropriate
+            navigate(`/profile/${product.creator}`);
         } catch (error) {
             console.error('Error updating product:', error);
             alert('Failed to update product.');
