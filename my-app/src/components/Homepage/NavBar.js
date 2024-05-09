@@ -9,7 +9,7 @@ const GuestNavBar = () => {
             <div className="container">
                 {/*<a className="navbar-brand" href="/">*/}
                 {/*    <img src="" alt="logo" style={{ width: 30, height: 30 }} />*/}
-                {/*</a>*/}<small className="navbar-brand">Valley Events</small>
+                {/*</a>*/}<small className="navbar-brand">Valley Markets</small>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -45,7 +45,7 @@ const UserNavBar = () => {
             <div className="container">
 
                 <a className="navbar-brand" href="/">
-                    Valley Events
+                    Valley Markets
                 </a>
 
                 <button className="navbar-toggler ms-auto icon-md btn btn-light p-0" type="button" data-bs-toggle="collapse"

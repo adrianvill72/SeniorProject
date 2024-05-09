@@ -23,8 +23,8 @@ function EventSearchForm({ handleSearch, cities, states }) {
             <div className="row position-relative">
               <div className="col-lg-9 mx-auto">
                 <div className="text-center">
-                  <h1 className="text-white">Find events near you</h1>
-                  <p className="text-white">Let's uncover the best places to eat, drink, and shop nearest to you.</p>
+                  <h1 className="text-white">Find markets near you</h1>
+                  <p className="text-white">Discover the best local markets and businesses near you.</p>
                 </div>
                 <div className="mx-auto bg-mode shadow rounded p-4 mt-5">
                   <form className="row align-items-end g-4" onSubmit={handleSubmit}>
@@ -59,7 +59,7 @@ function EventSearchForm({ handleSearch, cities, states }) {
                              onChange={e => setToDate(e.target.value)}/>
                     </div>
                     <div className="col-sm-6 col-lg-3">
-                      <button type="submit" className="btn btn-primary w-100">Filter Events</button>
+                      <button type="submit" className="btn btn-primary w-100">Filter Markets</button>
                     </div>
                   </form>
                 </div>
