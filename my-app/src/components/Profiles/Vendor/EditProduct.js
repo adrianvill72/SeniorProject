@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {getDatabase, ref, update, onValue, off} from 'firebase/database';
+import { getDatabase, ref, update, onValue, off, remove } from 'firebase/database';
 
 const EditProduct = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const db = getDatabase();
-    const [product, setproduct] = useState({
+    const [product, setProduct] = useState({
         title: '',
-        location: '',
-        date: '',
-        image: '',
+        description: '',
+        price: '',
         creator: ''
     });
 
     useEffect(() => {
         const productRef = ref(db, `products/${productId}`);
         onValue(productRef, (snapshot) => {
-            setproduct(snapshot.val());
+            setProduct(snapshot.val() || {});
         });
 
         return () => {
-            return () => off(productRef);
+            off(productRef);
         };
     }, [productId, db]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setproduct(prevState => ({
+        setProduct(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -37,11 +36,24 @@ const EditProduct = () => {
         e.preventDefault();
         try {
             await update(ref(db, `products/${productId}`), product);
-            alert('product updated successfully');
+            alert('Product updated successfully');
             navigate(`/profile/${product.creator}`);
         } catch (error) {
             console.error('Error updating product:', error);
             alert('Failed to update product.');
+        }
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            try {
+                await remove(ref(db, `products/${productId}`));
+                alert('Product deleted successfully');
+                navigate('/'); // Navigate back to a safe route
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                alert('Failed to delete product.');
+            }
         }
     };
 
@@ -71,7 +83,7 @@ const EditProduct = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="date">Product Price</label>
+                    <label htmlFor="price">Product Price</label>
                     <input
                         type="text"
                         className="form-control"
@@ -82,6 +94,7 @@ const EditProduct = () => {
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">Save Changes</button>
+                <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete Product</button>
             </form>
         </div>
     );
